@@ -27,3 +27,17 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/hs_err_pid13216.log
+/hs_err_pid19260.log
+/options.txt
+/optionsof.txt
+/optionsshaders.txt
+/servers.dat
+/servers.dat_old
+/usercache.json
+/shaderpacks/
+/saves/
+/resourcepacks/
+/logs/
+/crash-reports/
+/assets/
