@@ -7,16 +7,11 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
+import tech.drainwalk.api.impl.interfaces.IShaders;
 import tech.drainwalk.utils.shader.Shader;
 
 @UtilityClass
-public class RenderService extends AbstractGui implements IInstanceAccess {
-
-    private final Shader ROUNDED_TEXTURE = new Shader("shaders/rounded_texture.fsh", true);
-    private final Shader ROUNDED_GRADIENT = new Shader("shaders/rounded_gradient.fsh", true);
-    private final Shader SHADOW = new Shader("shaders/shadow.fsh", true);
-    private final Shader ROUNDED_OUTLINE = new Shader("shaders/rounded_outline.fsh", true);
-    private final Shader PROGRESS_BAR = new Shader("shaders/progress_bar.fsh", true);
+public class RenderService extends AbstractGui implements IInstanceAccess, IShaders {
 
     public void drawRoundedRectWithOutline(MatrixStack matrixStack, float x, float y, float width, float height, float round, float thickness, int color, int outlineColor) {
 //        drawRoundedRect(matrixStack, x, y, width, height, round, color);

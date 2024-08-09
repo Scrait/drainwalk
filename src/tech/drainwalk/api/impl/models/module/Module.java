@@ -16,9 +16,11 @@ import tech.drainwalk.client.option.Option;
 import tech.drainwalk.client.option.options.*;
 import tech.drainwalk.utils.sound.Sound;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Module implements IInstanceAccess {
     @Getter
@@ -108,6 +110,31 @@ public class Module implements IInstanceAccess {
     public void toggle(int currentKey) {
         toggle();
         this.currentKey = currentKey;
+    }
+
+    public List<Option<?>> getSettingList() {
+        List<Field> fields = new ArrayList<>();
+        Class<?> clazz = this.getClass();
+
+        // Collect fields from the class hierarchy
+        while (clazz != null) {
+            for (Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
+                fields.add(field);
+            }
+            clazz = clazz.getSuperclass(); // Move to the superclass
+        }
+
+        return fields.stream().map(field -> {
+                    try {
+                        return field.get(this);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }).filter(field -> field instanceof Option<?>)
+                .map(field -> (Option<?>) field)
+                .collect(Collectors.toList());
     }
 
     public JsonObject save() {
@@ -202,10 +229,7 @@ public class Module implements IInstanceAccess {
         keyBindsAnimation.setPrevValue(0);
     }
 
-    @Getter
-    private final List<Option<?>> settingList = new ArrayList<>();
-
     public void register(Option<?> ... settings) {
-        settingList.addAll(Arrays.asList(settings));
+//        settingList.addAll(Arrays.asList(settings));
     }
 }

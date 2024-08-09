@@ -6,6 +6,7 @@ public interface ITheme {
 
     int backgroundFirstColor = ColorService.hexToRgb("#222128");
     int backgroundSecondColor = ColorService.hexToRgb("#111111");
-    int mainColor = ColorService.hexToRgb("#A39BD6");
+    int textFirstColor = ColorService.hexToRgb("#FFFFFF");
+    int textSecondColor = ColorService.hexToRgb("#A39BD6");
 
 }

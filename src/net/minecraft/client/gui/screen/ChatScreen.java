@@ -171,8 +171,8 @@ public class ChatScreen extends Screen
 
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor() / 2), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor() / 2));
-        Drainwalk.getInstance().getDraggableComponent().click((int) vec2f.x, (int) vec2f.y);
+        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor()), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor()));
+        Drainwalk.getInstance().getDraggableController().click((int) vec2f.x, (int) vec2f.y);
         if (this.commandSuggestionHelper.onClick((double)((int)mouseX), (double)((int)mouseY), button))
         {
             return true;
@@ -201,7 +201,7 @@ public class ChatScreen extends Screen
     }
 
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        Drainwalk.getInstance().getDraggableComponent().release();
+        Drainwalk.getInstance().getDraggableController().release();
         return false;
     }
 
@@ -251,8 +251,8 @@ public class ChatScreen extends Screen
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
-        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor() / 2), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor() / 2));
-        Drainwalk.getInstance().getDraggableComponent().draw((int) vec2f.x, (int) vec2f.y);
+        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor()), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor()));
+        Drainwalk.getInstance().getDraggableController().draw(matrixStack, (int) vec2f.x, (int) vec2f.y);
 
         this.setListener(this.inputField);
         this.inputField.setFocused2(true);

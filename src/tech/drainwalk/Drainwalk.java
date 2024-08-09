@@ -7,7 +7,7 @@ import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.models.DrainwalkResource;
 import tech.drainwalk.api.managers.DraggableManager;
 import tech.drainwalk.api.managers.ScriptManager;
-import tech.drainwalk.client.draggables.DraggableComponent;
+import tech.drainwalk.client.draggables.DraggableController;
 import tech.drainwalk.api.impl.models.ClientInfo;
 import tech.drainwalk.client.gui.modernui.MenuMain;
 import tech.drainwalk.client.profile.Profile;
@@ -37,11 +37,11 @@ public class Drainwalk implements IInstanceAccess {
     @Getter
     private final DraggableManager draggableManager;
     @Getter
+    private final DraggableController draggableController;
+    @Getter
     private final MenuMain menuMain;
     @Getter
     private final Profile profile;
-    @Getter
-    private final DraggableComponent draggableComponent;
 
     private Drainwalk() {
         instance = this;
@@ -53,7 +53,7 @@ public class Drainwalk implements IInstanceAccess {
         draggableManager = new DraggableManager();
         scriptManager = new ScriptManager();
         LOGGER.info("Init api");
-        draggableComponent = new DraggableComponent();
+        draggableController = new DraggableController();
         profile = new Profile("Scrait", 0, "999 days", "Шеф");
         menuMain = new MenuMain();
         LOGGER.info("End of init");
