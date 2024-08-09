@@ -171,6 +171,8 @@ public final class MainWindow implements AutoCloseable
 
     public void setWindowIcon(InputStream iconStream16X, InputStream iconStream32X)
     {
+        if (Minecraft.IS_RUNNING_ON_MAC) return;
+
         RenderSystem.assertThread(RenderSystem::isInInitPhase);
 
         try (MemoryStack memorystack = MemoryStack.stackPush())
