@@ -1,0 +1,12 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "drainwalk:impl/arial/arial.ttf",
+      "shift": [0, 0.3],
+      "size": 11.0,
+      "oversample": 4.0,
+      "skip": ""
+    }
+  ]
+}
