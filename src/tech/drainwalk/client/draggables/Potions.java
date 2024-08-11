@@ -1,14 +1,17 @@
 package tech.drainwalk.client.draggables;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.util.InputMappings;
+import net.minecraft.client.renderer.texture.PotionSpriteUploader;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectUtils;
 import net.minecraft.util.math.vector.Vector2f;
-import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.events.render.EventRender2D;
 import tech.drainwalk.api.impl.models.DraggableComponent;
-import tech.drainwalk.api.impl.models.module.Module;
 import tech.drainwalk.client.option.options.FloatOption;
+import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.animation.AnimationService;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
@@ -21,7 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-public class Keybinds extends DraggableComponent {
+public class Potions extends DraggableComponent {
 
     private final FloatOption padding = new FloatOption("Padding", 6, 0, 10).addIncrementValue(0.1f);
     private final FloatOption offsetOption = new FloatOption("Offset", 16, 10, 20).addIncrementValue(0.1f);
@@ -29,18 +32,22 @@ public class Keybinds extends DraggableComponent {
     private float widthAnim = 0;
     private final float FONT_SIZE = 13;
 
-    public Keybinds() {
-        super("Keybinds", new Vector2f(10, 10 * 2 + 26), 145, 66);
+    public Potions() {
+        super("Potions", new Vector2f(10 * 2 + 145, 10 * 2 + 26), 145, 66);
     }
 
     @Override
     public void onUpdate(UpdateEvent event) {
-        for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
-            module.getKeyBindsAnimation().update(module.isEnabled());
+        for (EffectInstance effectInstance : mc.player.getActivePotionEffects()) {
+            effectInstance.getPotionsAnimation().update(effectInstance.getDuration() > 10);
         }
         try {
-            Collections.max(dw.getApiMain().getModuleManager().stream().
-                    filter(Module::isEnabled).filter(Module::hasBind).toList(), Comparator.comparing(s -> SFPD_REGULAR.getWidth(s.getName() + getKeyString(s), FONT_SIZE)));
+            Collections.max(mc.player.getActivePotionEffects(),
+                    Comparator.comparing(
+                            s -> SFPD_REGULAR.getWidth(
+                                    s.getPotion().getDisplayName().getString() + " " + I18n.format("enchantment.level." + (s.getAmplifier() + 1)
+                                    ) + EffectUtils.getPotionDurationString(s, 1), FONT_SIZE)
+                    ));
             getShowAnimation().update(true);
         } catch (NoSuchElementException ignored) {
             getShowAnimation().update(false);
@@ -57,20 +64,23 @@ public class Keybinds extends DraggableComponent {
         final MatrixStack matrixStack = event.getMatrixStack();
 
         float offset = 0;
-        for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
-            module.getKeyBindsAnimation().animate(0, 1, 0.25f, EasingList.CIRC_OUT, mc.getTimer().renderPartialTicks);
-            if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
-                offset += offsetOption.getValue() * module.getKeyBindsAnimation().getAnimationValue();
+        for (EffectInstance effectInstance : mc.player.getActivePotionEffects()) {
+            effectInstance.getPotionsAnimation().animate(0, 1, 0.25f, EasingList.CIRC_OUT, mc.getTimer().renderPartialTicks);
+            if (effectInstance.getPotionsAnimation().getAnimationValue() > 0.1) {
+                offset += offsetOption.getValue() * effectInstance.getPotionsAnimation().getAnimationValue();
             }
         }
 
         getShowAnimation().animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
 
-        Module moduleMax;
+        EffectInstance potionMax;
         try {
-            moduleMax = Collections.max(dw.getApiMain().getModuleManager().stream().
-                    filter(Module::isEnabled).filter(Module::hasBind).toList(), Comparator.comparing(s -> SFPD_REGULAR.getWidth(s.getName() + getKeyString(s), FONT_SIZE)));
-            final float width = SFPD_REGULAR.getWidth(moduleMax.getName() + getKeyString(moduleMax), FONT_SIZE) + 50 + padding.getValue();
+            potionMax = Collections.max(mc.player.getActivePotionEffects(),
+                    Comparator.comparing(
+                            s -> SFPD_REGULAR.getWidth(
+                                    getPotionString(s), FONT_SIZE)
+                    ));
+            final float width = SFPD_REGULAR.getWidth(getPotionString(potionMax), FONT_SIZE) + 10 + padding.getValue();
             widthAnim = AnimationService.animation(widthAnim, width, (float) (Timer.deltaTime()));
         } catch (NoSuchElementException ignored) {
         }
@@ -92,11 +102,11 @@ public class Keybinds extends DraggableComponent {
             {
                 // left
                 RenderService.drawRoundedOutlineRect(matrixStack, x + padding.getValue(), y + padding.getValue(), 16, 16, 3,1, borderColor);
-                ICONS.drawText(matrixStack, String.valueOf(Icon.BIND.getSymbol()), x + padding.getValue() + 2.25f, y + padding.getValue() + 3f, textSecondColor, 12);
+                ICONS.drawText(matrixStack, String.valueOf(Icon.POTION.getSymbol()), x + padding.getValue() + 3.75f, y + padding.getValue() + 3f, textSecondColor, 12);
 
                 RenderService.drawRoundedOutlineRect(matrixStack, x + padding.getValue() + 20, y + padding.getValue(), 16, 16, 3,1, borderColor);
                 SFPD_REGULAR.drawText(matrixStack,
-                        String.valueOf(dw.getApiMain().getModuleManager().stream().filter(module -> module.getKeyBindsAnimation().getAnimationValue() > 0.1f).toList().size()),
+                        String.valueOf(mc.player.getActivePotionEffects().size()),
                         x + padding.getValue() + 24.5f, y + padding.getValue() + 1f, textSecondColor, FONT_SIZE);
 
 
@@ -108,26 +118,20 @@ public class Keybinds extends DraggableComponent {
             }
 
             offset = 1;
-            for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
-                if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
+            PotionSpriteUploader potionspriteuploader = mc.getPotionSpriteUploader();
+            for (EffectInstance effectInstance : mc.player.getActivePotionEffects()) {
+                if (effectInstance.getPotionsAnimation().getAnimationValue() > 0.1) {
                     final float currentY = y + offset + titleHeight + padding.getValue();
-                    float iconSize = 14;
-                    // idiotical shit dont work with enum case
-                    switch (module.getCategory().getIcon().getSymbol()) {
-                        case 'e':
-                            iconSize = 12.5f;
-                            break;
-                        case 'a':
-                            iconSize = 11.5f;
-                            break;
-                    };
-                    final String icon = String.valueOf(module.getCategory().getIcon().getSymbol());
-                    final float categoryIconWidth = ICONS.getWidth(icon, iconSize);
-                    ICONS.drawText(matrixStack, icon, x + padding.getValue(), currentY - ICONS.getHeight(iconSize) + 15, ColorService.getColorWithAlpha(textSecondColor, module.getKeyBindsAnimation().getAnimationValue()), iconSize);
-                    SFPD_REGULAR.drawText(matrixStack, module.getName(), x + padding.getValue() + categoryIconWidth + 4, currentY, ColorService.getColorWithAlpha(textFirstColor, module.getKeyBindsAnimation().getAnimationValue()), FONT_SIZE);
-                    SFPD_REGULAR.drawText(matrixStack, getKeyString(module),
-                            (x + widthAnim - padding.getValue()) - SFPD_REGULAR.getWidth(getKeyString(module), FONT_SIZE), currentY, ColorService.getColorWithAlpha(textSecondColor, module.getKeyBindsAnimation().getAnimationValue()), FONT_SIZE);
-                    offset += offsetOption.getValue() * module.getKeyBindsAnimation().getAnimationValue();
+                    final float categoryIconWidth = 8;
+                    TextureAtlasSprite textureatlassprite = potionspriteuploader.getSprite(effectInstance.getPotion());
+                    mc.getTextureManager().bindTexture(textureatlassprite.getAtlasTexture().getTextureLocation());
+                    RenderService.blit(matrixStack, (int) (x + padding.getValue()), (int) currentY, 0, 100, 100, textureatlassprite);
+                    ICONS.drawText(matrixStack, String.valueOf(Icon.POTION.getSymbol()), x + padding.getValue(), currentY + 2f, textSecondColor, 12);
+                    SFPD_REGULAR.drawText(matrixStack, effectInstance.getPotion().getDisplayName().getString() + " " + I18n.format("enchantment.level." + (effectInstance.getAmplifier() + 1)
+                    ), x + padding.getValue() + categoryIconWidth + 4, currentY, ColorService.getColorWithAlpha(textFirstColor, effectInstance.getPotionsAnimation().getAnimationValue()), FONT_SIZE);
+                    SFPD_REGULAR.drawText(matrixStack, EffectUtils.getPotionDurationString(effectInstance, 1),
+                            (x + widthAnim - padding.getValue()) - SFPD_REGULAR.getWidth(EffectUtils.getPotionDurationString(effectInstance, 1), FONT_SIZE), currentY, ColorService.getColorWithAlpha(textSecondColor, effectInstance.getPotionsAnimation().getAnimationValue()), FONT_SIZE);
+                    offset += offsetOption.getValue() * effectInstance.getPotionsAnimation().getAnimationValue();
                 }
             }
 
@@ -136,8 +140,9 @@ public class Keybinds extends DraggableComponent {
         // render end
     }
 
-    private String getKeyString(Module module) {
-        return InputMappings.getInputByCode(module.getCurrentKey(), GLFW.GLFW_KEY_UNKNOWN).getTranslationKeySplit().toUpperCase();
+    private String getPotionString(EffectInstance effectInstance) {
+        return effectInstance.getPotion().getDisplayName().getString() + " " + I18n.format("enchantment.level." + (effectInstance.getAmplifier() + 1)
+        ) + EffectUtils.getPotionDurationString(effectInstance, 1);
     }
 
 }

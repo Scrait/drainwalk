@@ -38,6 +38,12 @@ public class GLService implements IInstanceAccess {
         matrixStack.translate(-(x + width / 2), -(y + height / 2), 0);
     }
 
+    public void scaleAnimation(float x, float y, float width, float height, float scaleValue) {
+        RenderSystem.translatef((x + width / 2), (y + height / 2), 0);
+        RenderSystem.scalef(scaleValue, scaleValue, scaleValue);
+        RenderSystem.translatef(-(x + width / 2), -(y + height / 2), 0);
+    }
+
     public Vector2f normalizeCords(double mouseX, double mouseY, double factor) {
         if (Minecraft.IS_RUNNING_ON_MAC) factor *= 2;
         return new Vector2f((float) (mouseX * mc.getMainWindow().getGuiScaleFactor() / factor), (float) (mouseY * mc.getMainWindow().getGuiScaleFactor() / factor));

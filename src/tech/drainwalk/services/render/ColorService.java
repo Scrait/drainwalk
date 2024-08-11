@@ -172,4 +172,16 @@ public class ColorService {
         return rgb(r, g, b);
     }
 
+    public int gradient(int speed, int index, int... colors) {
+        int angle = (int) ((System.currentTimeMillis() / speed + index) % 360);
+        angle = (angle > 180 ? 360 - angle : angle) + 180;
+        int colorIndex = (int) (angle / 360f * colors.length);
+        if (colorIndex == colors.length) {
+            colorIndex--;
+        }
+        int color1 = colors[colorIndex];
+        int color2 = colors[colorIndex == colors.length - 1 ? 0 : colorIndex + 1];
+        return interpolateColor(color1, color2, angle / 360f * colors.length - colorIndex);
+    }
+
 }

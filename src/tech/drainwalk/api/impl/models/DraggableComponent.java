@@ -12,6 +12,7 @@ import tech.drainwalk.client.option.options.BooleanOption;
 import tech.drainwalk.client.option.options.DraggableOption;
 import tech.drainwalk.api.impl.events.render.EventRender2D;
 import tech.drainwalk.client.option.options.FloatOption;
+import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.render.ColorService;
 
 @Getter
@@ -19,8 +20,10 @@ public abstract class DraggableComponent extends Module implements ITheme, IFont
 
     private final DraggableOption draggableOption;
     private final BooleanOption blur = new BooleanOption("Blur", false);
+    private final BooleanOption fade = new BooleanOption("Fade", true);
     private final FloatOption alpha = new FloatOption("Alpha", 1, 0, 1).addIncrementValue(0.01f);
     private final FloatOption round = new FloatOption("Round", 6, 0, 10).addIncrementValue(0.1f);
+    private final Animation showAnimation = new Animation();
     private boolean optionsEnabled = false;
 
     public DraggableComponent(String name, Vector2f value, float width, float height) {
@@ -35,6 +38,9 @@ public abstract class DraggableComponent extends Module implements ITheme, IFont
     public abstract void onRender2D(EventRender2D event);
 
     protected int[] getBackgroundColorsWithAlpha() {
+        if (fade.getValue()) {
+            return getFadedColors(2);
+        }
         return new int[]{
                 ColorService.getColorWithAlpha(backgroundFirstColor, alpha.getValue()),
                 ColorService.getColorWithAlpha(backgroundSecondColor, alpha.getValue())
