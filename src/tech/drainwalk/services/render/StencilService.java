@@ -1,4 +1,4 @@
-package tech.drainwalk.utils.render;
+package tech.drainwalk.services.render;
 
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -7,7 +7,7 @@ import tech.drainwalk.utils.Utils;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class StencilUtils extends Utils {
+public class StencilService extends Utils {
 
     /*
      * Given to me by igs

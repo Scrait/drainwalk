@@ -13,6 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
+import tech.drainwalk.services.render.StencilService;
 import tech.drainwalk.utils.Utils;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.utils.shader.Shader;
@@ -120,11 +121,11 @@ public class RenderUtils extends Utils {
         y -= 4;
         x2 += 8;
         y2 += 8;
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         drawRoundedOutlineRect(x, y, x2, y2, radius + 3, 4f, color);
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         drawRoundedShadow(x + 2, y + 2, x2 - 4, y2 - 4, softness, radius, color);
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
     }
 
     public static void drawRoundedOutlineRect(float x, float y, float x2, float y2, float round, float thickness, int color) {

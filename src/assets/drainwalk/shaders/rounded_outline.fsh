@@ -20,7 +20,7 @@ float dstfn(vec2 p, vec2 b, vec4 r) {
 void main() {
     vec2 pixel = fragCoord * size;
     vec2 centre = 0.5 * size;
-    vec2 halfSize = size / 2.0 - vec2(outlineWidth);
+    vec2 halfSize = size / 2.0 - vec2(outlineWidth / 2.0);
     float d = dstfn(centre - pixel, halfSize, round);
 
     // Calculate the gradient color
@@ -28,7 +28,7 @@ void main() {
                      mix(color3, color4, fragCoord.x),
                      fragCoord.y);
 
-    float sa = smoothstep(0.0, outlineWidth, abs(d) - outlineWidth / 2.0);
+    float sa = smoothstep(0.0, outlineWidth / 2.0, abs(d) - outlineWidth / 2.0 / 2.0);
     vec4 c = mix(vec4(color.rgb, 1.0), vec4(color.rgb, 0.0), sa);
     gl_FragColor = vec4(c.rgb, color.a * c.a);
 }

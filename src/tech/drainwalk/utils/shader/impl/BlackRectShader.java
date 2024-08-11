@@ -2,11 +2,10 @@ package tech.drainwalk.utils.shader.impl;
 
 import com.mojang.blaze3d.systems.IRenderCall;
 import tech.drainwalk.utils.render.RenderUtils;
-import tech.drainwalk.utils.render.StencilUtils;
+import tech.drainwalk.services.render.StencilService;
 import tech.drainwalk.utils.shader.AbstractShader;
 
 import java.awt.*;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BlackRectShader extends AbstractShader {
@@ -21,14 +20,14 @@ public class BlackRectShader extends AbstractShader {
         this.setActive(this.isActive() || !runnable.isEmpty());
 
         if (this.isActive()) {
-            StencilUtils.initStencilToWrite();
+            StencilService.initStencilToWrite();
             //this.inputFramebuffer.bindFramebuffer(true);
             runnable.forEach(IRenderCall::execute);
-            StencilUtils.readStencilBuffer(1);
+            StencilService.readStencilBuffer(1);
 
             //this.outputFramebuffer.bindFramebuffer(true);
             RenderUtils.drawRect(0, 0, mc.getMainWindow().getFramebufferWidth(), mc.getMainWindow().getFramebufferHeight(), Color.BLACK.getRGB());
-            StencilUtils.uninitStencilBuffer();
+            StencilService.uninitStencilBuffer();
         }
     }
 

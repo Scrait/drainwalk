@@ -9,7 +9,7 @@ import tech.drainwalk.client.font.FontManager;
 import tech.drainwalk.client.gui.modernui.MenuMain;
 import tech.drainwalk.client.gui.modernui.component.Component;
 import tech.drainwalk.services.render.ColorService;
-import tech.drainwalk.utils.render.StencilUtils;
+import tech.drainwalk.services.render.StencilService;
 
 public class MainComponent extends Component {
 
@@ -27,11 +27,11 @@ public class MainComponent extends Component {
 
 //        RenderService.drawRoundedGradientRect(matrixStack, x, y, 120, height, 15, ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panel, parent.getRandAnimation().getAnimationValue()));
 //        RenderService.drawRoundedGradientRect(matrixStack, x + 110, y, width - 110, height, 15, ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panel, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()), ColorService.getColorWithAlpha(ClientColor.panelMain, parent.getRandAnimation().getAnimationValue()));
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         RenderService.drawRoundedRect(matrixStack, x, y, width, height, 15, ClientColor.panelMain);
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         RenderService.drawImage(matrixStack, new ResourceLocation("drainwalk/images/pattern.png"), x + 115, y, width, height, -1);
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
         RenderService.drawRoundedOutlineRect(matrixStack, x - 1, y - 1, width + 2, height + 2, 15, 1.5f, ColorService.getColorWithAlpha(ClientColor.panelLines, 0.3f));
         RenderService.drawRect(matrixStack, x + 115, y, 1f, height, ColorService.getColorWithAlpha(ClientColor.panelLines, 0.3f));
         RenderService.drawRect(matrixStack, x, y + height - 30, 115, 1f, ColorService.getColorWithAlpha(ClientColor.panelLines, 0.3f));

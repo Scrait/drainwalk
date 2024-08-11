@@ -11,9 +11,10 @@ import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
-import tech.drainwalk.Drainwalk;
+import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
+import tech.drainwalk.services.render.GLService;
 
-public class ChatScreen extends Screen
+public class ChatScreen extends Screen implements IInstanceAccess
 {
     private String historyBuffer = "";
 
@@ -171,8 +172,8 @@ public class ChatScreen extends Screen
 
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor()), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor()));
-        Drainwalk.getInstance().getDraggableController().click((int) vec2f.x, (int) vec2f.y);
+        final Vector2f vec2f = GLService.INSTANCE.normalizeCords(mouseX, mouseY, 1);
+        dw.getDraggableController().click((int) vec2f.x, (int) vec2f.y);
         if (this.commandSuggestionHelper.onClick((double)((int)mouseX), (double)((int)mouseY), button))
         {
             return true;
@@ -201,7 +202,7 @@ public class ChatScreen extends Screen
     }
 
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        Drainwalk.getInstance().getDraggableController().release();
+        dw.getDraggableController().release();
         return false;
     }
 
@@ -251,8 +252,8 @@ public class ChatScreen extends Screen
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
-        final Vector2f vec2f = new Vector2f((float) (mouseX * minecraft.getMainWindow().getGuiScaleFactor()), (float) (mouseY * minecraft.getMainWindow().getGuiScaleFactor()));
-        Drainwalk.getInstance().getDraggableController().draw(matrixStack, (int) vec2f.x, (int) vec2f.y);
+        final Vector2f vec2f = GLService.INSTANCE.normalizeCords(mouseX, mouseY, 1);
+        dw.getDraggableController().draw(matrixStack, (int) vec2f.x, (int) vec2f.y);
 
         this.setListener(this.inputField);
         this.inputField.setFocused2(true);

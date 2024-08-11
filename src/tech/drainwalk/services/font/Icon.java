@@ -19,7 +19,13 @@ public enum Icon {
     UNKNOWN('l'),
     WARNING('m'),
     PROFILE2('n'),
-    LOGO('w');
+    CLOCK('o'),
+    EVENT('p'),
+    BIND('q'),
+    POTION('r'),
+    LOGO('w'),
+    CLOSE('x'),
+    MARK('y');
 
     private final char symbol;
 

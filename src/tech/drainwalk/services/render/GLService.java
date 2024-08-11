@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.vector.Vector2f;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 
 public class GLService implements IInstanceAccess {
@@ -12,6 +13,7 @@ public class GLService implements IInstanceAccess {
     public static final GLService INSTANCE = new GLService();
 
     public void rescale(double factor) {
+        if (Minecraft.IS_RUNNING_ON_MAC) factor *= 2;
         rescale(mc.getMainWindow().getFramebufferWidth() / factor, mc.getMainWindow().getFramebufferHeight() / factor);
     }
 
@@ -34,6 +36,11 @@ public class GLService implements IInstanceAccess {
         matrixStack.translate((x + width / 2), (y + height / 2), 0);
         matrixStack.scale(scaleValue, scaleValue, scaleValue);
         matrixStack.translate(-(x + width / 2), -(y + height / 2), 0);
+    }
+
+    public Vector2f normalizeCords(double mouseX, double mouseY, double factor) {
+        if (Minecraft.IS_RUNNING_ON_MAC) factor *= 2;
+        return new Vector2f((float) (mouseX * mc.getMainWindow().getGuiScaleFactor() / factor), (float) (mouseY * mc.getMainWindow().getGuiScaleFactor() / factor));
     }
 
     public void setupRenderState() {

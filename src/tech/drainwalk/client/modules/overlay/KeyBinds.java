@@ -16,7 +16,7 @@ import tech.drainwalk.client.font.FontManager;
 import tech.drainwalk.services.render.GLService;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.utils.render.RenderUtils;
-import tech.drainwalk.utils.render.StencilUtils;
+import tech.drainwalk.services.render.StencilService;
 import tech.drainwalk.utils.time.Timer;
 
 import java.util.Collections;
@@ -75,30 +75,30 @@ public class KeyBinds extends Module {
             GLService.INSTANCE.rescaleMC();
         });
 
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         RenderUtils.drawRect(x - 10, y - 10, widthAnim + 20, 27, -1);
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         RenderUtils.drawRoundedRect(x - 1, y, widthAnim + 2, 25, 9, ColorService.getColorWithAlpha(ClientColor.panelMain, 0.7f));
         FontManager.REGULAR_18.drawCenteredString(event.getMatrixStack(), "keybinds", x + widthAnim / 2, (y + 13 / 2f), ClientColor.textMain);
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
         double i = 8.5;
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         RenderUtils.drawRoundedRect(x - 1, y, widthAnim + 2, (17 + inter), 9, -1);
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         RenderUtils.drawGradientRect(x - 1, y + 17.2f, widthAnim + 2, inter, ColorService.getColorWithAlpha(ClientColor.panelMain, 0.17f), ColorService.getColorWithAlpha(ClientColor.panelMain, 0.17f), ColorService.getColorWithAlpha(ClientColor.panelMain, 0.7f), ColorService.getColorWithAlpha(ClientColor.panelMain, 0.7f));
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
         RenderUtils.drawGradientRect(x, y + 17f, widthAnim / 2, 0.7f, ColorService.rgba(242, 242, 242, 0), ColorService.rgb(242, 242, 242), ColorService.rgb(242, 242, 242), ColorService.rgba(242, 242, 242, 0));
         RenderUtils.drawGradientRect(x + widthAnim / 2, y + 17f, widthAnim / 2, 0.7f, ColorService.rgb(242, 242, 242), ColorService.rgba(242, 242, 242, 0), ColorService.rgba(242, 242, 242, 0), ColorService.rgb(242, 242, 242));
         for (Module module : dw.getApiMain().getModuleManager().stream().filter(module -> module.getKey().size() > 0).toList()) {
             module.getKeyBindsAnimation().animate(0, 1, 0.25f, EasingList.CIRC_OUT, mc.getTimer().renderPartialTicks);
             if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
-                StencilUtils.initStencilToWrite();
+                StencilService.initStencilToWrite();
                 RenderUtils.drawRoundedRect(x, y + 17, widthAnim, (1000), 5, -1);
-                StencilUtils.readStencilBuffer(1);
+                StencilService.readStencilBuffer(1);
                 FontManager.LIGHT_14.drawString(event.getMatrixStack(), module.getName(), x + 4, (float) ((y + 20 / 2f) + i) - 10 + 13 * module.getKeyBindsAnimation().getAnimationValue(), ColorService.rgbaFloat(242, 242, 247, 1 * module.getKeyBindsAnimation().getAnimationValue()));
                 FontManager.LIGHT_14.drawString(event.getMatrixStack(), "[" + InputMappings.getInputByCode(module.getCurrentKey(), 0).getTranslationKeySplit().toUpperCase() + "]",
                         (float) (x + widthAnim - 3.5) - FontManager.LIGHT_14.getStringWidth("[" + InputMappings.getInputByCode(module.getCurrentKey(), 0).getTranslationKeySplit().toUpperCase() + "]"), (float) ((y + 20 / 2f) + i) - 10 + 13 * module.getKeyBindsAnimation().getAnimationValue(), ColorService.rgbaFloat(242, 242, 247, 1 * module.getKeyBindsAnimation().getAnimationValue()));
-                StencilUtils.uninitStencilBuffer();
+                StencilService.uninitStencilBuffer();
                 i += 11f * module.getKeyBindsAnimation().getAnimationValue();
             }
         }

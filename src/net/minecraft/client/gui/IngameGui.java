@@ -258,7 +258,7 @@ public class IngameGui extends AbstractGui
             }
         }
 
-        GLService.INSTANCE.rescale(Minecraft.IS_RUNNING_ON_MAC ? 2 : 1);
+        GLService.INSTANCE.rescale(1);
         final EventRender2D preEr2d = new EventRender2D.Pre(this.mc.getMainWindow(), matrixStack, partialTicks);
         EventManager.call(preEr2d);
         final EventRender2D er2d = new EventRender2D(this.mc.getMainWindow(), matrixStack, partialTicks);

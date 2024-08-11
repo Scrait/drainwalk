@@ -3,6 +3,7 @@ package tech.drainwalk.client.draggables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.text.*;
+import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.events.render.EventRender2D;
 import tech.drainwalk.api.impl.models.DraggableComponent;
 import tech.drainwalk.services.animation.AnimationService;
@@ -15,7 +16,12 @@ public class Watermark extends DraggableComponent {
     private float fps;
 
     public Watermark() {
-        super("Watermark", new Vector2f(5, 5), 257, 26);
+        super("Watermark", new Vector2f(10, 10), 257, 26);
+    }
+
+    @Override
+    public void onUpdate(UpdateEvent event) {
+
     }
 
     @Override
@@ -47,7 +53,7 @@ public class Watermark extends DraggableComponent {
         final float height = getDraggableOption().getHeight();
         final int[] backgroundColors = getBackgroundColorsWithAlpha();
 
-        RenderService.drawRoundedLinearGradientRect(event.getMatrixStack(), x, y, width, height, 6, backgroundColors[0], backgroundColors[1]);
+        RenderService.drawRoundedLinearGradientRect(event.getMatrixStack(), x, y, width, height, getRound().getValue(), backgroundColors[0], backgroundColors[1]);
         ICONS.drawText(event.getMatrixStack(), String.valueOf(Icon.LOGO.getSymbol()), x + paddings[0], y + paddings[1], textSecondColor, 16);
         SFPD_REGULAR.drawText(event.getMatrixStack(), text, x + paddings[0] + paddingFromLogo, y + paddings[1], 13, 1);
     }

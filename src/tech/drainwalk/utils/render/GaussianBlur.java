@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import tech.drainwalk.services.render.StencilService;
 import tech.drainwalk.utils.Utils;
 import tech.drainwalk.utils.shader.kernel.GaussianKernel;
 import tech.drainwalk.utils.shader.Shader;
@@ -45,13 +46,13 @@ public class GaussianBlur extends Utils {
     public static void draw(int radius) {
         if (renderQueue.isEmpty())
             return;
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         while(!renderQueue.isEmpty()) {
             renderQueue.poll().execute();
         }
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         renderBlur(radius);
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
     }
 
     public static void renderBlur(float radius) {

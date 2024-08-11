@@ -43,7 +43,7 @@ public class CategoryComponent extends Component {
                             0.4f * hoverAnimationValue
                     )
             );
-            FontManager.ICONS_26.drawString(matrixStack, String.valueOf(category.getIcon()), x + width / 2 - 38, y + offset - 0.7f,
+            FontManager.ICONS_26.drawString(matrixStack, String.valueOf(category.getIcon().getSymbol()), x + width / 2 - 38, y + offset - 0.7f,
                     ColorService.rgbFloat(
                             c[0] + hoverAnimationValue,
                             c[1] + hoverAnimationValue,

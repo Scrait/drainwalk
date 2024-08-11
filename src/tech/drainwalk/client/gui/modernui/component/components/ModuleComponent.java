@@ -14,7 +14,7 @@ import tech.drainwalk.client.gui.modernui.component.Component;
 import tech.drainwalk.services.render.ScreenService;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.utils.math.MathematicUtils;
-import tech.drainwalk.utils.render.StencilUtils;
+import tech.drainwalk.services.render.StencilService;
 import tech.drainwalk.utils.time.Timer;
 
 import java.util.List;
@@ -41,9 +41,9 @@ public class ModuleComponent extends Component {
 //        scrollAnimation.animate(scrollValue, 0, 2, EasingList.NONE, partialTicks);
 //        scrollAnimation.update(false);
 //        RenderService.drawRoundedGradientRect(matrixStack, x, y, width, height, 17, ClientColor.panel, ClientColor.panelMain, ClientColor.panel, ClientColor.panelMain);
-        StencilUtils.initStencilToWrite();
+        StencilService.initStencilToWrite();
         RenderService.drawRoundedRect(matrixStack, x + 1, y + 1, width - 2, height - 2, 17, -1);
-        StencilUtils.readStencilBuffer(1);
+        StencilService.readStencilBuffer(1);
         //RenderUtils.drawRect(x, y, width, height, -1);
         float offset = 11 + scrollAnim;
         for (Module module : dw.getApiMain().getModuleManager().stream().filter(module -> module.getCategory() == currentCategory).toList()) {
@@ -65,15 +65,15 @@ public class ModuleComponent extends Component {
             final float xPosition = x + width;
             matrixStack.translate(xPosition, yPosition, 0);
             matrixStack.translate(-xPosition, -yPosition, 0);
-            StencilUtils.initStencilToWrite();
+            StencilService.initStencilToWrite();
             RenderService.drawRect(matrixStack, x + 1, y + offset - 11, width - 2, FontManager.REGULAR_20.getFontHeight() + 22, ColorService.getColorWithAlpha(-1, hoverAnimationValue));
-            StencilUtils.readStencilBuffer(1);
+            StencilService.readStencilBuffer(1);
 //            RenderService.drawRoundedGradientRect(matrixStack, x, y, width, height, 17, ColorService.getColorWithAlpha(ClientColor.panel, hoverAnimationValue), ColorService.rgbaFloat(0, 0, 0, hoverAnimationValue - 1), ColorService.rgbaFloat(0, 0, 0, hoverAnimationValue - 1), ColorService.getColorWithAlpha(ClientColor.panel, hoverAnimationValue));
 //            RenderService.drawRoundedGradientRect(matrixStack, x, y, width, height, 17, ColorService.rgbaFloat(0, 0, 0, hoverAnimationValue - 1), ColorService.getColorWithAlpha(ClientColor.panel, hoverAnimationValue),  ColorService.getColorWithAlpha(ClientColor.panel, hoverAnimationValue), ColorService.rgbaFloat(0, 0, 0, hoverAnimationValue - 1));
-            StencilUtils.uninitStencilBuffer();
-            StencilUtils.initStencilToWrite();
+            StencilService.uninitStencilBuffer();
+            StencilService.initStencilToWrite();
             RenderService.drawRoundedRect(matrixStack, x + 1, y + 1, width - 2, height - 2, 17, -1);
-            StencilUtils.readStencilBuffer(1);
+            StencilService.readStencilBuffer(1);
             FontManager.REGULAR_20.drawString(matrixStack, module.getName(), x + 10, y + offset + 0.5f, color);
 
             // icons
@@ -104,7 +104,7 @@ public class ModuleComponent extends Component {
         upAnimation.update(true);
         RenderService.drawRoundedShadow(matrixStack, x, y + height - 5, width, 50, 15 * upAnimation.getAnimationValue(), 0, ClientColor.panelMain);
 
-        StencilUtils.uninitStencilBuffer();
+        StencilService.uninitStencilBuffer();
         RenderService.drawRoundedOutlineRect(matrixStack, x, y, width, height, 17, 1.5f, ColorService.getColorWithAlpha(ClientColor.panelLines, 0.3f));
 
 

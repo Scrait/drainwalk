@@ -2,6 +2,7 @@ package tech.drainwalk.client.modules.overlay;
 
 import com.darkmagician6.eventapi.EventTarget;
 import org.lwjgl.glfw.GLFW;
+import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.interfaces.IFonts;
 import tech.drainwalk.api.impl.models.module.Module;
 import tech.drainwalk.api.impl.models.module.category.Category;
@@ -12,12 +13,20 @@ public class Indicators extends Module implements IFonts {
 
     public Indicators() {
         super("Indicators", Category.OVERLAY);
-        this.addKey(GLFW.GLFW_KEY_V);
+        toggle();
+    }
+
+    @EventTarget
+    public void onUpdate(UpdateEvent event) {
+        if (dw == null) return;
+        dw.getDraggableManager().forEach(draggableComponent -> draggableComponent.onUpdate(event));
     }
 
     @EventTarget
     public void onRender2D(EventRender2D event) {
-        dw.getDraggableManager().findByClass(Watermark.class).onRender2D(event);
+        if (dw == null) return;
+
+        dw.getDraggableManager().forEach(draggableComponent -> draggableComponent.onRender2D(event));
     }
 
 }

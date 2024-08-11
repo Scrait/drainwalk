@@ -76,6 +76,10 @@ public class Module implements IInstanceAccess {
         return this;
     }
 
+    public boolean hasBind() {
+        return !this.key.isEmpty();
+    }
+
     public Module addType(Type type) {
         this.type = type;
         return this;
@@ -93,18 +97,18 @@ public class Module implements IInstanceAccess {
         if (enabled) {
             EventManager.register(this);
             System.out.println("ENABLED " + name);
-            dw.getApiMain().getNotificationManager().register(new Notification(getName() + " ", "was enabled", Notification.Type.WARNING));
+//            dw.getApiMain().getNotificationManager().register(new Notification(getName() + " ", "was enabled", Notification.Type.WARNING));
             onEnable();
         } else {
             onDisable();
             System.out.println("DISABLED " + name);
-            dw.getApiMain().getNotificationManager().register(new Notification(getName() + " ", "was disabled", Notification.Type.WARNING));
+//            dw.getApiMain().getNotificationManager().register(new Notification(getName() + " ", "was disabled", Notification.Type.WARNING));
             EventManager.unregister(this);
         }
 
-        if (dw.getApiMain().getModuleManager().findByClass(ClientSounds.class).isEnabled()) {
-            sound.playSound("buttonclick1.wav", 100);
-        }
+//        if (dw.getApiMain().getModuleManager().findByClass(ClientSounds.class).isEnabled()) {
+//            sound.playSound("buttonclick1.wav", 100);
+//        }
     }
 
     public void toggle(int currentKey) {
