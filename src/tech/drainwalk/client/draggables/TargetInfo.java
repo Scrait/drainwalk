@@ -92,7 +92,7 @@ public class TargetInfo extends DraggableComponent {
                     ColorService.getColorWithAlpha(additionalSecondColor, 0.5f)
             );
             RenderService.drawRoundedLinearGradientRect(matrixStack, x + padding.getValue(), y + padding.getValue() * 2 + 28, (float) healthBarWidth, 7, 4, additionalFirstColor, additionalSecondColor);
-            SFPD_REGULAR.drawCenteredText(matrixStack, String.valueOf((int) target.getHealth()), x + padding.getValue() + maxBarWidth / 2, y + padding.getValue() * 2 + 29, textFirstColor, 6);
+            SFPD_REGULAR.drawCenteredText(matrixStack, String.valueOf((int) target.getHealth()), x + padding.getValue() + maxBarWidth / 2, y + padding.getValue() * 2 + 28.5f, textFirstColor, 6);
             healthBarWidth = AnimationService.getAnimationState((float) healthBarWidth, (float) healthWid, (float) (10 * Timer.deltaTime()));
         }
 

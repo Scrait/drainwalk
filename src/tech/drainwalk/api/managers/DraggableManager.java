@@ -3,10 +3,7 @@ package tech.drainwalk.api.managers;
 import tech.drainwalk.api.impl.interfaces.IFind;
 import tech.drainwalk.api.impl.interfaces.IManager;
 import tech.drainwalk.api.impl.models.DraggableComponent;
-import tech.drainwalk.client.draggables.Keybinds;
-import tech.drainwalk.client.draggables.Potions;
-import tech.drainwalk.client.draggables.TargetInfo;
-import tech.drainwalk.client.draggables.Watermark;
+import tech.drainwalk.client.draggables.*;
 
 import java.util.ArrayList;
 
@@ -22,6 +19,7 @@ public class DraggableManager extends ArrayList<DraggableComponent> implements I
         register(new Keybinds());
         register(new Potions());
         register(new TargetInfo());
+        register(new Radar());
     }
 
     @Override
