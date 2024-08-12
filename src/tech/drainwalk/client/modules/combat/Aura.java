@@ -125,4 +125,9 @@ public class Aura extends Module {
         currentRotation = new Vector2f(mc.player.rotationYaw, mc.player.rotationPitch);
     }
 
+    @Override
+    public void onDisable() {
+        target = null;
+    }
+
 }

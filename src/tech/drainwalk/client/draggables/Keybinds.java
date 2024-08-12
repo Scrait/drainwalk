@@ -103,8 +103,8 @@ public class Keybinds extends DraggableComponent {
                 //right
                 final float closeWidth = ICONS.getWidth(String.valueOf(Icon.CLOSE.getSymbol()), 10);
                 final float optionsWidth = ICONS.getWidth(String.valueOf(Icon.OPTIONS.getSymbol()), 10);
-                ICONS.drawText(matrixStack, String.valueOf(Icon.CLOSE.getSymbol()), x + widthAnim - padding.getValue() - closeWidth, y + padding.getValue() + 5f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
-                ICONS.drawText(matrixStack, String.valueOf(Icon.OPTIONS.getSymbol()), x + widthAnim - padding.getValue() - optionsWidth - closeWidth - 2, y + padding.getValue() + 5f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
+                ICONS.drawText(matrixStack, String.valueOf(Icon.CLOSE.getSymbol()), x + widthAnim - padding.getValue() - closeWidth, y + padding.getValue() + 4f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
+                ICONS.drawText(matrixStack, String.valueOf(Icon.OPTIONS.getSymbol()), x + widthAnim - padding.getValue() - optionsWidth - closeWidth - 2, y + padding.getValue() + 4f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
             }
 
             offset = 1;

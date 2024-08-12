@@ -2,7 +2,6 @@ package tech.drainwalk.client.draggables;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +31,6 @@ public class TargetInfo extends DraggableComponent {
     private final FloatOption padding = new FloatOption("Padding", 6, 0, 10).addIncrementValue(0.1f);
     private double healthBarWidth;
     private LivingEntity target = null;
-    private boolean direction = true;
 
 
     public TargetInfo() {
@@ -41,17 +39,7 @@ public class TargetInfo extends DraggableComponent {
 
     @Override
     public void onUpdate(UpdateEvent event) {
-        getShowAnimation().update(direction);
-    }
-
-    @Override
-    public void onRender2D(EventRender2D event) {
-        final int[] backgroundColors = getBackgroundColorsWithAlpha();
-        final float x = getDraggableOption().getValue().x;
-        final float y = getDraggableOption().getValue().y;
-        final MatrixStack matrixStack = event.getMatrixStack();
-        getShowAnimation().animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
-
+        boolean direction;
         if (dw.getApiMain().getModuleManager().findByClass(Aura.class).getTarget() == null) {
             if (mc.player != null && mc.currentScreen instanceof ChatScreen) {
                 target = mc.player;
@@ -63,6 +51,16 @@ public class TargetInfo extends DraggableComponent {
             target = dw.getApiMain().getModuleManager().findByClass(Aura.class).getTarget();
             direction = true;
         }
+        getShowAnimation().update(direction);
+    }
+
+    @Override
+    public void onRender2D(EventRender2D event) {
+        final int[] backgroundColors = getBackgroundColorsWithAlpha();
+        final float x = getDraggableOption().getValue().x;
+        final float y = getDraggableOption().getValue().y;
+        final MatrixStack matrixStack = event.getMatrixStack();
+        getShowAnimation().animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
 
         matrixStack.push();
 //        matrixStack.scale(2, 2,2);

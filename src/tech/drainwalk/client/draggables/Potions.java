@@ -39,7 +39,7 @@ public class Potions extends DraggableComponent {
     @Override
     public void onUpdate(UpdateEvent event) {
         for (EffectInstance effectInstance : mc.player.getActivePotionEffects()) {
-            effectInstance.getPotionsAnimation().update(effectInstance.getDuration() > 10);
+            effectInstance.getPotionsAnimation().update(effectInstance.getDuration() > 5);
         }
         try {
             Collections.max(mc.player.getActivePotionEffects(),
@@ -113,8 +113,8 @@ public class Potions extends DraggableComponent {
                 //right
                 final float closeWidth = ICONS.getWidth(String.valueOf(Icon.CLOSE.getSymbol()), 10);
                 final float optionsWidth = ICONS.getWidth(String.valueOf(Icon.OPTIONS.getSymbol()), 10);
-                ICONS.drawText(matrixStack, String.valueOf(Icon.CLOSE.getSymbol()), x + widthAnim - padding.getValue() - closeWidth, y + padding.getValue() + 5f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
-                ICONS.drawText(matrixStack, String.valueOf(Icon.OPTIONS.getSymbol()), x + widthAnim - padding.getValue() - optionsWidth - closeWidth - 2, y + padding.getValue() + 5f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
+                ICONS.drawText(matrixStack, String.valueOf(Icon.CLOSE.getSymbol()), x + widthAnim - padding.getValue() - closeWidth, y + padding.getValue() + 4f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
+                ICONS.drawText(matrixStack, String.valueOf(Icon.OPTIONS.getSymbol()), x + widthAnim - padding.getValue() - optionsWidth - closeWidth - 2, y + padding.getValue() + 4f, ColorService.getColorWithAlpha(textFirstColor, 0.2f), 10);
             }
 
             offset = 1;
