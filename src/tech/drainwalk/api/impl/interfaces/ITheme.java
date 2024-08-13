@@ -11,6 +11,8 @@ public interface ITheme {
     int borderColor = ColorService.hexToRgb("#353343");
     int additionalFirstColor = ColorService.hexToRgb("#555170");
     int additionalSecondColor = ColorService.hexToRgb("#A39BD6");
+    int additionalThirdColor = ColorService.hexToRgb("#C7BEFF");
+    int uiBorderColor = ColorService.hexToRgb("#55526E");
 
     default int[] getFadedColors(int amount) {
         int[] colors = new int[amount];

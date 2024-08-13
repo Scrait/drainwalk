@@ -30,7 +30,7 @@ public class Radar extends DraggableComponent {
         final MatrixStack matrixStack = event.getMatrixStack();
         final float[] paddings = {8, 6};
 
-        RenderService.drawRoundedLinearGradientRect(matrixStack, x, y, getDraggableOption().getWidth(), getDraggableOption().getHeight(), getRound().getValue(), backgroundColors[0], backgroundColors[1]);
+        RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, getDraggableOption().getWidth(), getDraggableOption().getHeight(), getRound().getValue(), backgroundColors[0], backgroundColors[1]);
         drawCompass(matrixStack, x + paddings[0], y + paddings[1],
                 getDraggableOption().getWidth() - paddings[0] * 2 + 1, getDraggableOption().getHeight() - paddings[1] * 2 - 1,
                 mc.gameRenderer.getActiveRenderInfo().getYaw());

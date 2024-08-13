@@ -97,7 +97,7 @@ public class Potions extends DraggableComponent {
             GLService.INSTANCE.scaleAnimation(matrixStack, x, y, widthAnim, getDraggableOption().getHeight(), getShowAnimation().getAnimationValue());
 
             // background
-            RenderService.drawRoundedLinearGradientRect(matrixStack, x, y, widthAnim, getDraggableOption().getHeight(), round, backgroundColors[0], backgroundColors[1]);
+            RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, widthAnim, getDraggableOption().getHeight(), round, backgroundColors[0], backgroundColors[1]);
             // title
             {
                 // left

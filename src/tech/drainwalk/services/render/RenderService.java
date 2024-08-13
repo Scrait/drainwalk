@@ -58,12 +58,21 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
     }
 
     public void drawRoundedLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int colorLeft, int colorRight) {
-        drawRoundedGradientRect(matrixStack, x, y, width, height, round, round, round, round, colorRight, colorLeft, colorRight, colorLeft);
+        drawRoundedGradientRect(matrixStack, x, y, width, height, round, colorLeft, colorRight, colorRight, colorLeft);
+    }
+
+    public void drawRoundedDiagonalGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int color1, int color2) {
+        final int cornerColor = ColorService.interpolateColor(color1, color2, 0.5);
+        drawRoundedGradientRect(matrixStack, x, y, width, height, round, color1, cornerColor, color2, cornerColor);
+    }
+
+    public void drawRoundedGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int color1, int color2, int color3, int color4) {
+        drawRoundedGradientRect(matrixStack, x, y, width, height, round, round, round, round, color1, color2, color3, color4);
     }
 
     public void drawRoundedGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float roundTopLeft, float roundTopRight, float roundBottomRight, float roundBottomLeft, int color1, int color2, int color3, int color4) {
-        float[] c1 = ColorService.getRGBAf(color2);
-        float[] c2 = ColorService.getRGBAf(color1);
+        float[] c1 = ColorService.getRGBAf(color1);
+        float[] c2 = ColorService.getRGBAf(color2);
         float[] c3 = ColorService.getRGBAf(color4);
         float[] c4 = ColorService.getRGBAf(color3);
 
@@ -85,16 +94,29 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
     }
 
     public void drawRoundedOutlineRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int color) {
-        drawRoundedOutlineLinearGradientRect(matrixStack, x, y, width, height, round, outlineWidth, color, color);
+        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, color, color, color, color);
     }
 
-    public void drawRoundedOutlineLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int colorLeft, int colorRight) {
-        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, round, round, round, outlineWidth, colorRight, colorLeft, colorRight, colorLeft);
+    public void drawRoundedOutlineHorLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int colorLeft, int colorRight) {
+        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, colorLeft, colorRight, colorRight, colorLeft);
+    }
+
+    public void drawRoundedOutlineVerLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int colorTop, int colorBottom) {
+        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, colorTop, colorTop, colorBottom, colorBottom);
+    }
+
+    public void drawRoundedDiagonalGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int color1, int color2) {
+        final int cornerColor = ColorService.interpolateColor(color1, color2, 0.5);
+        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, color1, cornerColor, color2, cornerColor);
+    }
+
+    public void drawRoundedOutlineGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int color1, int color2, int color3, int color4) {
+        drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, round, round, round, outlineWidth, color1, color2, color3, color4);
     }
 
     public void drawRoundedOutlineGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float roundTopLeft, float roundTopRight, float roundBottomRight, float roundBottomLeft, float outlineWidth, int color1, int color2, int color3, int color4) {
-        float[] c1 = ColorService.getRGBAf(color2);
-        float[] c2 = ColorService.getRGBAf(color1);
+        float[] c1 = ColorService.getRGBAf(color1);
+        float[] c2 = ColorService.getRGBAf(color2);
         float[] c3 = ColorService.getRGBAf(color4);
         float[] c4 = ColorService.getRGBAf(color3);
 

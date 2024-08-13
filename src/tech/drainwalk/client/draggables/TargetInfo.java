@@ -61,12 +61,13 @@ public class TargetInfo extends DraggableComponent {
         final float y = getDraggableOption().getValue().y;
         final MatrixStack matrixStack = event.getMatrixStack();
         getShowAnimation().animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
+        if (target == null) return;
 
         matrixStack.push();
 //        matrixStack.scale(2, 2,2);
         GLService.INSTANCE.scaleAnimation(matrixStack, x, y, getDraggableOption().getWidth(), getDraggableOption().getHeight(), getShowAnimation().getAnimationValue());
         // bg
-        RenderService.drawRoundedLinearGradientRect(matrixStack, x, y, getDraggableOption().getWidth(), getDraggableOption().getHeight(), getRound().getValue(), backgroundColors[0], backgroundColors[1]);
+        RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, getDraggableOption().getWidth(), getDraggableOption().getHeight(), getRound().getValue(), backgroundColors[0], backgroundColors[1]);
 
         // head
         RenderService.drawRoundedTexture(matrixStack, new ResourceLocation("drainwalk/images/deus_mode.png"),x + padding.getValue(), y + padding.getValue(), 28, 28, 2, 1);

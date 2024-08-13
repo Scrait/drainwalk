@@ -53,7 +53,7 @@ public class Watermark extends DraggableComponent {
         final float height = getDraggableOption().getHeight();
         final int[] backgroundColors = getBackgroundColorsWithAlpha();
 
-        RenderService.drawRoundedLinearGradientRect(event.getMatrixStack(), x, y, width, height, getRound().getValue(), backgroundColors[0], backgroundColors[1]);
+        RenderService.drawRoundedDiagonalGradientRect(event.getMatrixStack(), x, y, width, height, getRound().getValue(), backgroundColors[0], backgroundColors[1]);
         ICONS.drawText(event.getMatrixStack(), String.valueOf(Icon.LOGO.getSymbol()), x + paddings[0], y + paddings[1], textSecondColor, 16);
         SFPD_REGULAR.drawText(event.getMatrixStack(), text, x + paddings[0] + paddingFromLogo, y + paddings[1], 13, 1);
     }
