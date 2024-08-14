@@ -354,11 +354,9 @@ public class KeyboardListener
             else if (!(mc.currentScreen instanceof ChatScreen) && mc.world != null)
             {
                 for (Module m : Drainwalk.getInstance().getApiMain().getModuleManager()) {
-                    for (int j = 0; j < m.getKey().size(); j++) {
-                        if (InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), key)) {
-                            if (m.getKey().get(j) == key) {
-                                m.toggle(key);
-                            }
+                    if (InputMappings.isKeyDown(mc.getMainWindow().getHandle(), key)) {
+                        if (m.getCurrentKey() == key) {
+                            m.toggle();
                         }
                     }
                 }

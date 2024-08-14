@@ -30,7 +30,7 @@ public class ScriptModule extends Module {
             super.addType((Type) ScriptUtils.convert(((JSObject) script.getEngine().get("script")).getMember("type"), Type.class));
         }
         if(((JSObject)script.getEngine().get("script")).hasMember("key")) {
-            super.addKey((Integer) ScriptUtils.convert(((JSObject) script.getEngine().get("script")).getMember("key"), Integer.class));
+            super.setCurrentKey((Integer) ScriptUtils.convert(((JSObject) script.getEngine().get("script")).getMember("key"), Integer.class));
         }
         if(((JSObject)script.getEngine().get("script")).hasMember("description")) {
             super.addDescription((String) ScriptUtils.convert(((JSObject) script.getEngine().get("script")).getMember("description"), String.class));
@@ -48,8 +48,8 @@ public class ScriptModule extends Module {
     }
 
     @Override
-    public List<Integer> getKey() {
-        return super.getKey();
+    public int getCurrentKey() {
+        return super.getCurrentKey();
     }
 
     @Override

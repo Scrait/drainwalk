@@ -91,7 +91,7 @@ public abstract class AbstractGui
     }
 
     protected static void fillGradient(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int colorFrom, int colorTo, int colorFrom2, int colorTo2) {
-        fillGradient(matrixStack, x1, y1, x2, y2, -90, colorFrom, colorTo, colorFrom2, colorTo2);
+        fillGradient(matrixStack, x1, y1, x2, y2, 90, colorFrom, colorTo, colorFrom2, colorTo2);
     }
 
     protected static void fillGradient(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int blitOffset, int colorFrom, int colorTo, int colorFrom2, int colorTo2)

@@ -14,6 +14,7 @@ import tech.drainwalk.client.profile.Profile;
 import tech.drainwalk.client.font.FontManager;
 import lombok.Getter;
 import lombok.Setter;
+import tech.drainwalk.client.ui.UIMain;
 
 public class Drainwalk implements IInstanceAccess {
 
@@ -39,7 +40,7 @@ public class Drainwalk implements IInstanceAccess {
     @Getter
     private final DraggableController draggableController;
     @Getter
-    private final MenuMain menuMain;
+    private final UIMain uiMain;
     @Getter
     private final Profile profile;
 
@@ -55,7 +56,7 @@ public class Drainwalk implements IInstanceAccess {
         LOGGER.info("Init api");
         draggableController = new DraggableController();
         profile = new Profile("Scrait", 0, "999 days", "Шеф");
-        menuMain = new MenuMain();
+        uiMain = new UIMain();
         LOGGER.info("End of init");
     }
 

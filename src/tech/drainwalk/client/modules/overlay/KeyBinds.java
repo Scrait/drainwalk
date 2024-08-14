@@ -39,7 +39,7 @@ public class KeyBinds extends Module {
 
     @EventTarget
     public void onUpdate(UpdateEvent event) {
-        for (Module module : dw.getApiMain().getModuleManager().stream().filter(module -> module.getKey().size() > 0).toList()) {
+        for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
             module.getKeyBindsAnimation().update(module.isEnabled());
         }
     }
@@ -49,14 +49,14 @@ public class KeyBinds extends Module {
         final float x = dragKb.getValue().x;
         final float y = dragKb.getValue().y;
         float offset = 0;
-        for (Module module : dw.getApiMain().getModuleManager().stream().filter(module -> module.getKey().size() > 0).toList()) {
+        for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
             if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
                 offset += 11f * module.getKeyBindsAnimation().getAnimationValue();
             }
         }
         inter = offset + 2;
         final Module moduleMax = Collections.max(dw.getApiMain().getModuleManager().stream().
-                filter(Module::isEnabled).filter(module -> module.getKey().size() > 0).toList(), Comparator.comparing(s -> FontManager.LIGHT_14.getStringWidth(s.getName() + InputMappings.getInputByCode(s.getCurrentKey(), 0).getTranslationKeySplit().toUpperCase())));
+                filter(Module::isEnabled).filter(Module::hasBind).toList(), Comparator.comparing(s -> FontManager.LIGHT_14.getStringWidth(s.getName() + InputMappings.getInputByCode(s.getCurrentKey(), 0).getTranslationKeySplit().toUpperCase())));
         final float width = FontManager.LIGHT_14.getStringWidth(moduleMax.getName() + "[" + InputMappings.getInputByCode(moduleMax.getCurrentKey(), 0).getTranslationKeySplit().toUpperCase() + "]") + 15;
         widthAnim = AnimationService.animation(widthAnim, width, (float) (Timer.deltaTime()));
         widthAnim = widthAnim < 50 ? 50 : widthAnim;
@@ -89,7 +89,7 @@ public class KeyBinds extends Module {
         StencilService.uninitStencilBuffer();
         RenderUtils.drawGradientRect(x, y + 17f, widthAnim / 2, 0.7f, ColorService.rgba(242, 242, 242, 0), ColorService.rgb(242, 242, 242), ColorService.rgb(242, 242, 242), ColorService.rgba(242, 242, 242, 0));
         RenderUtils.drawGradientRect(x + widthAnim / 2, y + 17f, widthAnim / 2, 0.7f, ColorService.rgb(242, 242, 242), ColorService.rgba(242, 242, 242, 0), ColorService.rgba(242, 242, 242, 0), ColorService.rgb(242, 242, 242));
-        for (Module module : dw.getApiMain().getModuleManager().stream().filter(module -> module.getKey().size() > 0).toList()) {
+        for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
             module.getKeyBindsAnimation().animate(0, 1, 0.25f, EasingList.CIRC_OUT, mc.getTimer().renderPartialTicks);
             if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
                 StencilService.initStencilToWrite();

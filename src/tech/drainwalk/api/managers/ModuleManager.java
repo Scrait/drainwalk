@@ -55,6 +55,7 @@ public class ModuleManager extends ArrayList<Module> implements IManager<Module>
             register(new ElytraFireworkFly());
             register(new Speed());
             register(new ClientSounds());
+            register(new GuiWalk());
         //OVERLAY
 //            register(new ModuleList());
             register(new Menu());

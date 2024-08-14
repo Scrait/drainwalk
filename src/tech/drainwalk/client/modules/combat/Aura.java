@@ -50,7 +50,8 @@ public class Aura extends Module {
                 ignoreNaked,
                 moveFix
         );
-        addKey(GLFW.GLFW_KEY_R);
+        setCurrentKey(GLFW.GLFW_KEY_R);
+        addDescription("Aura, automatically attacks nearby entities.");
     }
 
     @EventTarget

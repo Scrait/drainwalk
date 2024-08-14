@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.models.module.category.Category;
 import tech.drainwalk.api.impl.models.module.category.Type;
@@ -34,9 +35,8 @@ public class Module implements IInstanceAccess {
     @Getter
     private String description = "Module haven't description";
     @Getter
-    private final List<Integer> key = new ArrayList<>();
-    @Getter
-    private int currentKey = 0;
+    @Setter
+    private int currentKey = GLFW.GLFW_KEY_UNKNOWN;
     @Setter
     @Getter
     private boolean enabled;
@@ -66,18 +66,8 @@ public class Module implements IInstanceAccess {
         this.description = description;
     }
 
-    public Module addKey(int key) {
-        this.key.add(key);
-        return this;
-    }
-
-    public Module dellKey() {
-        this.key.remove(key.size() - 1);
-        return this;
-    }
-
     public boolean hasBind() {
-        return !this.key.isEmpty();
+        return currentKey != GLFW.GLFW_KEY_UNKNOWN;
     }
 
     public Module addType(Type type) {
@@ -111,11 +101,6 @@ public class Module implements IInstanceAccess {
 //        }
     }
 
-    public void toggle(int currentKey) {
-        toggle();
-        this.currentKey = currentKey;
-    }
-
     public List<Option<?>> getSettingList() {
         List<Field> fields = new ArrayList<>();
         Class<?> clazz = this.getClass();
@@ -144,12 +129,8 @@ public class Module implements IInstanceAccess {
     public JsonObject save() {
         final JsonObject object = new JsonObject();
         object.addProperty("state", isEnabled());
-        if (getKey().size() > 0) {
-            StringBuilder keys = new StringBuilder();
-            for (int i = 0; i < getKey().size(); i++) {
-                keys.append(getKey().get(i)).append(":");
-            }
-            object.addProperty("keyIndex", keys.toString());
+        if (hasBind()) {
+            object.addProperty("keyIndex", currentKey);
         }
         final JsonObject propertiesObject = new JsonObject();
         for (Option option : this.getSettingList()) {
@@ -180,12 +161,9 @@ public class Module implements IInstanceAccess {
                     this.toggle();
                 }
             }
-            this.getKey().clear();
+            currentKey = GLFW.GLFW_KEY_UNKNOWN;
             if (object.has("keyIndex")) {
-                final String[] keyIndexes = object.get("keyIndex").getAsString().split(":");
-                for (String keyIndex : keyIndexes) {
-                    this.addKey(Integer.parseInt(keyIndex));
-                }
+                currentKey = object.get("keyIndex").getAsInt();
             }
             for (Option option : getSettingList()) {
                 final JsonObject propertiesObject = object.getAsJsonObject("Options");

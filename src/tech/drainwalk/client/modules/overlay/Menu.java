@@ -10,13 +10,14 @@ public class Menu extends Module {
 
     public Menu() {
         super("Menu", Category.OVERLAY);
-        this.addKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
+        this.setCurrentKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     @Override
-    public void onEnable() {
-        mc.displayGuiScreen(new UIMain());
-        setEnabled(false);
+    public void toggle() {
+        if (!this.isEnabled() && mc.currentScreen != dw.getUiMain()) {
+            mc.displayGuiScreen(dw.getUiMain());
+        }
     }
 
 }

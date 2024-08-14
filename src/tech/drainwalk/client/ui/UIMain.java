@@ -13,6 +13,7 @@ import tech.drainwalk.api.impl.models.module.category.Category;
 import tech.drainwalk.client.theme.Theme;
 import tech.drainwalk.client.theme.ThemeSetting;
 import tech.drainwalk.client.ui.components.Component;
+import tech.drainwalk.client.ui.components.impl.HeaderComponent;
 import tech.drainwalk.client.ui.components.impl.LeftAreaComponent;
 import tech.drainwalk.client.ui.components.impl.MainComponent;
 import tech.drainwalk.client.ui.components.impl.ModulesComponent;
@@ -30,11 +31,12 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     private static ThemeSetting<Theme> selectedTheme = new ThemeSetting<>("Themes", Theme.BLACK);
     @Getter
     @Setter
-    protected Category selectedCategory = Category.COMBAT;
+    private Category selectedCategory = Category.COMBAT;
 
     private final List<Component> components = new ArrayList<>();
     private final float UI_WIDTH = 752;
     private final float UI_HEIGHT = 472;
+    @Getter
     private final Animation animation = new Animation();
     private boolean direction;
 
@@ -53,8 +55,10 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         final float x = width / 2 - UI_WIDTH / 2;
         final float y = height / 2 - UI_HEIGHT / 2;
 
+        components.clear();
         register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
         register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
+        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
         register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
     }
 

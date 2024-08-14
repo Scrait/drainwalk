@@ -22,6 +22,7 @@ public class Velocity extends Module {
     public Velocity() {
         super("Velocity", Category.COMBAT);
         register(mode);
+        addDescription("Velocity, removes the knock back effect.");
     }
 
     @Override

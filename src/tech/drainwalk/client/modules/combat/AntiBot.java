@@ -19,6 +19,7 @@ public class AntiBot extends Module {
 
     public AntiBot() {
         super("AntiBot", Category.COMBAT);
+        addDescription("Antibot, blocks AntiCheat generated bot.");
 //        register(remove);
     }
 
