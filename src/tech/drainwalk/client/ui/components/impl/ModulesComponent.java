@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import tech.drainwalk.api.impl.models.module.Module;
 import tech.drainwalk.client.ui.UIMain;
 import tech.drainwalk.client.ui.components.Component;
+import tech.drainwalk.services.font.Icon;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.services.render.RenderService;
 import tech.drainwalk.services.render.ScissorService;
@@ -35,28 +36,44 @@ public class ModulesComponent extends Component {
 
         ScissorService.enableScissor((int) x, (int) y, (int) width, (int) height);
 
-        float[] columnHeights = new float[COLUMNS]; // Высоты текущих колонок
+        float[] columnHeights = new float[COLUMNS];
         for (Module module : modules) {
             int i = modules.indexOf(module);
             int column = i % COLUMNS;
 
-            // Определяем координаты для текущего элемента
             float elementX = x + PADDING + column * (elementWidth + PADDING);
             float elementY = y + PADDING + columnHeights[column] - scrollOffset;
 
-            // Определяем высоту текущего элемента
             float elementHeight = getModuleHeight(module);
+            final int borderColor = ColorService.getColorWithAlpha(uiBorderColor, 0.5f);
 
-            // Рендерим фон модуля
             RenderService.drawRoundedVerLinearGradientRect(matrixStack, elementX, elementY, elementWidth, elementHeight, 8,
-                    moduleBackgroundColor, ColorService.getColorWithAlpha(moduleBackgroundColor, 0.1f));
-            RenderService.drawRoundedOutlineRect(matrixStack, elementX, elementY, elementWidth + 0.5f, elementHeight, 8, 1,
-                    ColorService.getColorWithAlpha(uiBorderColor, 0.5f));
+                    moduleBackgroundColor, ColorService.getColorWithAlpha(moduleBackgroundColor, 0));
+            RenderService.drawRoundedOutlineRect(matrixStack, elementX, elementY, elementWidth, elementHeight, 8, 1,
+                    borderColor);
 
-            // Рендерим текст модуля
-            SFPD_REGULAR.drawText(matrixStack, module.getName(), elementX + MODULE_PADDING, elementY + MODULE_PADDING, textFirstColor, 20);
+            SFPD_REGULAR.drawText(matrixStack, module.getName(), elementX + MODULE_PADDING, elementY + MODULE_PADDING, textFirstColor, 16);
+            SFPD_REGULAR.drawText(matrixStack, "дескрипшен размамон\n тест X чебурашка", elementX + MODULE_PADDING, elementY + MODULE_PADDING * 2 + SFPD_REGULAR.getHeight(16), ColorService.getColorWithAlpha(-1, 0.2f), 14);
 
-            // Обновляем высоту для колонки
+            // poloska
+            RenderService.drawRect(matrixStack, elementX + 1, elementY + MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14), elementWidth - 2, 1, borderColor);
+
+            ICONS.drawText(matrixStack, Icon.OPTIONS.getSymbolString(),
+                    elementX + MODULE_PADDING,
+                    elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 1,
+                    ColorService.getColorWithAlpha(additionalSecondColor, 0.4f), 14);
+
+            RenderService.drawRoundedRect(matrixStack,
+                    elementX + MODULE_PADDING + 25,
+                    elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) - 1,
+                    41, 18, 4, ColorService.getColorWithAlpha(additionalSecondColor, 0.2f));
+
+            SFPD_REGULAR.drawCenteredText(matrixStack, "NONE",
+                    elementX + MODULE_PADDING + 25 + 41f / 2,
+                    elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 2,
+                    ColorService.getColorWithAlpha(textFirstColor, 0.8f), 12);
+
+
             columnHeights[column] += elementHeight + PADDING;
         }
 
@@ -93,7 +110,7 @@ public class ModulesComponent extends Component {
     private float getModuleHeight(Module module) {
         // Определение высоты элемента на основе его контента.
         // Например, можно использовать фиксированное значение, или рассчитывать в зависимости от количества строк текста, изображения и т.д.
-        return 129;
+        return 105;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package tech.drainwalk.client.ui;
 
-import com.darkmagician6.eventapi.EventManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import lombok.Getter;
 import lombok.NonNull;
@@ -45,7 +44,6 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     public UIMain() {
         super(new StringTextComponent("DrainUI"));
         direction = true;
-
     }
 
     @Override

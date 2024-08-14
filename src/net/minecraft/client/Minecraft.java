@@ -1,6 +1,5 @@
 package net.minecraft.client;
 
-import by.radioegor146.nativeobfuscator.Native;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Queues;
 import com.google.gson.JsonElement;
