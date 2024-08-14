@@ -16,7 +16,7 @@ public class MainComponent extends Component {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, width, height, parent.getROUND(), backgroundFirstColor, backgroundSecondColor);
         final int uiBorderColorWithAlpha = ColorService.getColorWithAlpha(uiBorderColor, 0);
-        RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, width, height, parent.getROUND(), 1, uiBorderColor, uiBorderColorWithAlpha);
+        RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, x, y, width, height, parent.getROUND(), 1, uiBorderColor, uiBorderColorWithAlpha);
 
         // TODO mb find more logical place for this separators
         // left area separator

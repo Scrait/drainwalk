@@ -11,7 +11,6 @@ import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.events.render.EventRender2D;
 import tech.drainwalk.api.impl.models.DraggableComponent;
 import tech.drainwalk.client.option.options.FloatOption;
-import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.animation.AnimationService;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
@@ -121,7 +120,7 @@ public class Potions extends DraggableComponent {
             PotionSpriteUploader potionspriteuploader = mc.getPotionSpriteUploader();
             for (EffectInstance effectInstance : mc.player.getActivePotionEffects()) {
                 if (effectInstance.getPotionsAnimation().getAnimationValue() > 0.1) {
-                    final float currentY = y + offset + titleHeight + padding.getValue();
+                    final float currentY = y + offset + titleHeight + padding.getValue() - offsetOption.getValue() + offsetOption.getValue() * effectInstance.getPotionsAnimation().getAnimationValue();
                     final float categoryIconWidth = 8;
                     TextureAtlasSprite textureatlassprite = potionspriteuploader.getSprite(effectInstance.getPotion());
                     mc.getTextureManager().bindTexture(textureatlassprite.getAtlasTexture().getTextureLocation());

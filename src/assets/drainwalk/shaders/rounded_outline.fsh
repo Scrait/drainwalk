@@ -21,7 +21,7 @@ void main() {
     vec2 pixel = fragCoord * size;
     vec2 centre = 0.5 * size;
     vec2 halfSize = size / 2.0 - vec2(outlineWidth / 2.0);
-    float d = dstfn(centre - pixel, halfSize, round);
+    float d = dstfn(centre - pixel, halfSize - vec2(outlineWidth / 2.0), round);
 
     // Calculate the gradient color
     vec4 color = mix(mix(color1, color2, fragCoord.x),

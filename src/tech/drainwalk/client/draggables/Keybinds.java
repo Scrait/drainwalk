@@ -96,7 +96,7 @@ public class Keybinds extends DraggableComponent {
 
                 RenderService.drawRoundedOutlineRect(matrixStack, x + padding.getValue() + 20, y + padding.getValue(), 16, 16, 3,1, borderColor);
                 SFPD_REGULAR.drawText(matrixStack,
-                        String.valueOf(dw.getApiMain().getModuleManager().stream().filter(module -> module.getKeyBindsAnimation().getAnimationValue() > 0.1f).toList().size()),
+                        String.valueOf(dw.getApiMain().getModuleManager().stream().filter(module -> module.hasBind() && module.isEnabled()).toList().size()),
                         x + padding.getValue() + 24.5f, y + padding.getValue() + 1f, textSecondColor, FONT_SIZE);
 
 
@@ -110,7 +110,7 @@ public class Keybinds extends DraggableComponent {
             offset = 1;
             for (Module module : dw.getApiMain().getModuleManager().stream().filter(Module::hasBind).toList()) {
                 if (module.getKeyBindsAnimation().getAnimationValue() > 0.1) {
-                    final float currentY = y + offset + titleHeight + padding.getValue();
+                    final float currentY = y + offset + titleHeight + padding.getValue() - offsetOption.getValue() + offsetOption.getValue() * module.getKeyBindsAnimation().getAnimationValue();
                     float iconSize = 14;
                     // idiotical shit dont work with enum case
                     switch (module.getCategory().getIcon().getSymbol()) {

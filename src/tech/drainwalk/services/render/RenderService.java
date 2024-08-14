@@ -8,7 +8,6 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.IShaders;
-import tech.drainwalk.utils.shader.Shader;
 
 @UtilityClass
 public class RenderService extends AbstractGui implements IInstanceAccess, IShaders {
@@ -54,11 +53,15 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
     }
 
     public void drawRoundedRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int color) {
-        drawRoundedLinearGradientRect(matrixStack, x, y, width, height, round, color, color);
+        drawRoundedGradientRect(matrixStack, x, y, width, height, round, color, color, color, color);
     }
 
-    public void drawRoundedLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int colorLeft, int colorRight) {
+    public void drawRoundedHorLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int colorLeft, int colorRight) {
         drawRoundedGradientRect(matrixStack, x, y, width, height, round, colorLeft, colorRight, colorRight, colorLeft);
+    }
+
+    public void drawRoundedVerLinearGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int colorTop, int colorBottom) {
+        drawRoundedGradientRect(matrixStack, x, y, width, height, round, colorTop, colorTop, colorBottom, colorBottom);
     }
 
     public void drawRoundedDiagonalGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, int color1, int color2) {
@@ -78,7 +81,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
 
         RenderSystem.color4f(0, 0, 0, 0);
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.param, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param, GlStateManager.SourceFactor.ONE.param, GlStateManager.DestFactor.ZERO.param);
+        RenderSystem.defaultBlendFunc();
         ROUNDED_GRADIENT.useProgram();
         ROUNDED_GRADIENT.setupUniform2f("size", width, height);
         ROUNDED_GRADIENT.setupUniform4f("round", roundTopLeft, roundTopRight, roundBottomRight, roundBottomLeft);
@@ -105,7 +108,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, colorTop, colorTop, colorBottom, colorBottom);
     }
 
-    public void drawRoundedDiagonalGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int color1, int color2) {
+    public void drawRoundedOutlineDiagonalGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, float round, float outlineWidth, int color1, int color2) {
         final int cornerColor = ColorService.interpolateColor(color1, color2, 0.5);
         drawRoundedOutlineGradientRect(matrixStack, x, y, width, height, round, outlineWidth, color1, cornerColor, color2, cornerColor);
     }
@@ -122,7 +125,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
 
         RenderSystem.color4f(0, 0, 0, 0);
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.param, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param, GlStateManager.SourceFactor.ONE.param, GlStateManager.DestFactor.ZERO.param);
+        RenderSystem.defaultBlendFunc();
         ROUNDED_OUTLINE.useProgram();
         ROUNDED_OUTLINE.setupUniform2f("size", width, height);
         ROUNDED_OUTLINE.setupUniform4f("round", roundTopLeft, roundTopRight, roundBottomRight, roundBottomLeft);

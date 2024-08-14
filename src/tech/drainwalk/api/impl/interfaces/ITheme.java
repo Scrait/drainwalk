@@ -13,6 +13,7 @@ public interface ITheme {
     int additionalSecondColor = ColorService.hexToRgb("#A39BD6");
     int additionalThirdColor = ColorService.hexToRgb("#C7BEFF");
     int uiBorderColor = ColorService.hexToRgb("#55526E");
+    int moduleBackgroundColor = ColorService.hexToRgb("#25242D");
 
     default int[] getFadedColors(int amount) {
         int[] colors = new int[amount];
