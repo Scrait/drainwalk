@@ -21,9 +21,9 @@ public class MainComponent extends Component {
         // TODO mb find more logical place for this separators
         // left area separator
         final float leftAreaWidth = 64;
-        RenderService.drawGradintRect(matrixStack, x + leftAreaWidth, y, 1, height, uiBorderColor, uiBorderColorWithAlpha);
+        RenderService.drawGradientRect(matrixStack, x + leftAreaWidth, y + 1, 1, height - 2, uiBorderColor, uiBorderColorWithAlpha);
         // header separator
-        RenderService.drawGradintRect(matrixStack, x + leftAreaWidth, y + 59, width - leftAreaWidth, 1, uiBorderColorWithAlpha, uiBorderColor, uiBorderColor, uiBorderColorWithAlpha);
+        RenderService.drawGradientRect(matrixStack, x + leftAreaWidth, y + 59, width - leftAreaWidth, 1, uiBorderColorWithAlpha, uiBorderColor, uiBorderColor, uiBorderColorWithAlpha);
     }
 
     @Override

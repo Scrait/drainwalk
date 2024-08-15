@@ -31,4 +31,12 @@ public class EventRender3D implements Event {
             super(matrixStack, partialTicks);
         }
     }
+
+    public static class PostAll extends EventRender3D
+    {
+        public PostAll(MatrixStack matrixStack, float partialTicks) {
+            super(matrixStack, partialTicks);
+        }
+    }
+
 }

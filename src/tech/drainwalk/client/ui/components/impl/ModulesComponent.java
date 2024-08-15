@@ -48,7 +48,7 @@ public class ModulesComponent extends Component {
         float scaledWidth = width * scaleValue;
         float scaledHeight = height * scaleValue;
 
-        ScissorService.enableScissor((int) scaledX, (int) scaledY, (int) scaledWidth, (int) scaledHeight);
+//        ScissorService.enableScissor((int) scaledX, (int) scaledY, (int) scaledWidth, (int) scaledHeight);
 
         float[] columnHeights = new float[COLUMNS];
         for (Module module : modules) {
@@ -102,7 +102,7 @@ public class ModulesComponent extends Component {
             columnHeights[column] += elementHeight + PADDING;
         }
 
-        ScissorService.disableScissor();
+//        ScissorService.disableScissor();
     }
 
     @Override

@@ -1963,6 +1963,8 @@ public class WorldRenderer implements IResourceManagerReloadListener, AutoClosea
         RenderSystem.depthMask(true);
         RenderSystem.disableBlend();
         RenderSystem.popMatrix();
+        final EventRender3D er3dPostAll = new EventRender3D.PostAll(matrixStackIn, partialTicks);
+        EventManager.call(er3dPostAll);
         FogRenderer.resetFog();
     }
 

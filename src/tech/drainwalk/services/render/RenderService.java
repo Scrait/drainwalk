@@ -40,11 +40,11 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         RenderSystem.enableAlphaTest();
     }
 
-    public void drawGradintRect(MatrixStack matrixStack, float x, float y, float width, float height, int colorFrom, int colorTo) {
-        drawGradintRect(matrixStack, x, y, width, height, colorFrom, colorFrom, colorTo, colorTo);
+    public void drawGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, int colorFrom, int colorTo) {
+        drawGradientRect(matrixStack, x, y, width, height, colorFrom, colorFrom, colorTo, colorTo);
     }
 
-    public void drawGradintRect(MatrixStack matrixStack, float x, float y, float width, float height, int colorFrom, int colorTo, int colorFrom2, int colorTo2) {
+    public void drawGradientRect(MatrixStack matrixStack, float x, float y, float width, float height, int colorFrom, int colorTo, int colorFrom2, int colorTo2) {
         matrixStack.push();
         matrixStack.translate(x, y, 0);
         matrixStack.scale(width, height, 1);

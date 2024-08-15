@@ -1,15 +1,25 @@
 package tech.drainwalk.client.ui;
 
+import com.darkmagician6.eventapi.EventManager;
+import com.darkmagician6.eventapi.EventTarget;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.StringTextComponent;
+import tech.drainwalk.api.impl.events.UpdateEvent;
+import tech.drainwalk.api.impl.events.render.EventRender3D;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.IManager;
 import tech.drainwalk.api.impl.models.module.category.Category;
+import tech.drainwalk.client.modules.render.JumpCircles;
 import tech.drainwalk.client.theme.Theme;
 import tech.drainwalk.client.theme.ThemeSetting;
 import tech.drainwalk.client.ui.components.Component;
@@ -19,7 +29,10 @@ import tech.drainwalk.client.ui.components.impl.MainComponent;
 import tech.drainwalk.client.ui.components.impl.ModulesComponent;
 import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.animation.EasingList;
+import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.services.render.GLService;
+import tech.drainwalk.services.render.RenderService;
+import tech.drainwalk.services.render.ScreenService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +52,8 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @Getter
     private final Animation animation = new Animation();
     private boolean direction;
+    private Vector3d onClosePlayerPos;
+    private Vector2f rotation;
 
     @Getter
     private final float ROUND = 8;
@@ -56,6 +71,8 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         final float y = height / 2 - UI_HEIGHT / 2;
 
         components.clear();
+        EventManager.unregister(this);
+
         register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
         register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
         register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
@@ -84,12 +101,9 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
 
     @Override
     public void tick() {
-        animation.update(direction);
+        direction = true;
+        animation.update(true);
         components.forEach(Component::tick);
-        if (animation.getValue() == 0 && animation.getPrevValue() == 0) {
-            super.closeScreen();
-            direction = true;
-        }
     }
 
     @Override
@@ -120,6 +134,63 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @Override
     public void closeScreen() {
         direction = false;
+        final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
+        final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
+
+        onClosePlayerPos = mc.player.getPositionVec().add(0, mc.player.getEyeHeight(), 0);
+
+        Vector3d lookVector = mc.player.getLookVec();
+
+        double offsetDistance = 7.0;
+        onClosePlayerPos = onClosePlayerPos.add(lookVector.scale(offsetDistance));
+        rotation = new Vector2f(mc.gameRenderer.getActiveRenderInfo().getYaw(), mc.gameRenderer.getActiveRenderInfo().getPitch());
+        components.clear();
+        final float x = UI_WIDTH / -2; // Позиция в мировых координатах (относительная)
+        final float y = UI_HEIGHT / -2;
+        register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
+        register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
+        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
+        register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
+        EventManager.register(this);
+        super.closeScreen();
+    }
+
+    // Custom after close render
+
+    @EventTarget
+    public void onRender3D(EventRender3D.PostAll event) {
+        MatrixStack matrixStack = event.getMatrixStack();
+        animation.animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
+
+        matrixStack.push();
+        RenderSystem.depthMask(false);
+        RenderSystem.disableCull();
+        event.getMatrixStack().translate(onClosePlayerPos.x - mc.getRenderManager().info.getProjectedView().getX(),
+                onClosePlayerPos.y - mc.getRenderManager().info.getProjectedView().getY(),
+                onClosePlayerPos.z - mc.getRenderManager().info.getProjectedView().getZ());
+        matrixStack.rotate(Vector3f.YP.rotationDegrees(-rotation.x + 180));
+        matrixStack.rotate(Vector3f.XP.rotationDegrees(-rotation.y + 180));
+
+        float scale = 0.01f;
+        matrixStack.scale(scale, scale, scale);
+        float x = UI_WIDTH / -2;
+        float y = UI_HEIGHT / -2;
+        GLService.INSTANCE.scaleAnimation(matrixStack, x, y, UI_WIDTH, UI_HEIGHT, animation.getAnimationValue());
+
+        final Vector2f fixedMouseCords = GLService.INSTANCE.normalizeCords(mc.mouseHelper.getMouseX(), mc.mouseHelper.getMouseY(), 1);
+        components.forEach(component -> component.render(matrixStack, (int) fixedMouseCords.x, (int) fixedMouseCords.y, event.getPartialTicks()));
+
+        RenderSystem.enableCull();
+        RenderSystem.depthMask(true);
+        matrixStack.pop();
+    }
+
+    @EventTarget
+    public void onUpdate(UpdateEvent ignoredEvent) {
+        animation.update(false);
+        if (animation.getValue() == 0 && animation.getPrevValue() == 0) {
+            EventManager.unregister(this);
+        }
     }
 
     @Override

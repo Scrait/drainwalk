@@ -13,6 +13,31 @@ import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 @UtilityClass
 public class ScreenService implements IInstanceAccess {
 
+    public Vector3d screenToWorld(float screenX, float screenY) {
+        // Получаем текущее положение камеры
+        Vector3d camera_pos = mc.getRenderManager().info.getProjectedView();
+        Quaternion cameraRotation = mc.getRenderManager().getCameraOrientation().copy();
+
+        // Нормализуем экранные координаты
+        float halfWidth = mc.getMainWindow().getScaledWidth() / 2.0F;
+        float halfHeight = mc.getMainWindow().getScaledHeight() / 2.0F;
+        float normalizedX = (screenX - halfWidth) / halfWidth;
+        float normalizedY = (halfHeight - screenY) / halfHeight;
+
+        // Преобразуем экранные координаты обратно в мировые
+        double fov = mc.gameRenderer.getFOVModifier(mc.getRenderManager().info, mc.getRenderPartialTicks(), true);
+        float scaleFactor = (float) (mc.getMainWindow().getScaledHeight() / (2.0F * Math.tan(Math.toRadians(fov / 2.0F))));
+
+        // Вектор из нормализованных координат экрана
+        Vector3f screenVector = new Vector3f(normalizedX * scaleFactor, normalizedY * scaleFactor, 1.0F);
+
+        // Применяем поворот камеры
+        screenVector.transform(cameraRotation);
+
+        // Возвращаем мировые координаты
+        return new Vector3d(camera_pos.x - screenVector.getX(), camera_pos.y - screenVector.getY(), camera_pos.z - screenVector.getZ());
+    }
+
     public Vector2f worldToScreen(Vector3d pos) {
         return worldToScreen(pos.x, pos.y, pos.z);
     }
