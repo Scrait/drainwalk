@@ -1,8 +1,8 @@
-package tech.drainwalk.client.ui.components.impl;
+package tech.drainwalk.client.ui.dwmenu.components.impl;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import tech.drainwalk.client.ui.UIMain;
-import tech.drainwalk.client.ui.components.Component;
+import tech.drainwalk.client.ui.dwmenu.UIMain;
+import tech.drainwalk.client.ui.dwmenu.components.Component;
 
 public class HeaderComponent extends Component {
 

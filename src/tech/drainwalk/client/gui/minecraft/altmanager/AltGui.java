@@ -15,6 +15,7 @@ import tech.drainwalk.client.theme.ClientColor;
 import tech.drainwalk.client.font.FontManager;
 import tech.drainwalk.client.gui.TextField;
 import tech.drainwalk.client.gui.minecraft.Generator;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 import tech.drainwalk.services.render.ScreenService;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.utils.render.RenderUtils;
@@ -49,7 +50,7 @@ public class AltGui extends Screen {
             this.field.setText("");
         }));
 
-        this.addButton(new Button(mW.getScaledWidth() / 2 + 52, mW.getScaledHeight() / 2 - 70 + radius, 80, 20, new StringTextComponent("Вернуться"), (p) -> Minecraft.getInstance().displayGuiScreen(new MainMenuScreen())));
+        this.addButton(new Button(mW.getScaledWidth() / 2 + 52, mW.getScaledHeight() / 2 - 70 + radius, 80, 20, new StringTextComponent("Вернуться"), (p) -> Minecraft.getInstance().displayGuiScreen(new MainMenuUI())));
 
         this.field = new TextField(FontManager.LIGHT_14, mW.getScaledWidth() / 2 - 43, mW.getScaledHeight() / 3 + 33, (int) (width / 4 - 30), 16, ITextComponent.getTextComponentOrEmpty("PanelComponentTextField"));
         this.field.setMaxStringLength(16);

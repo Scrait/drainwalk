@@ -1,5 +1,6 @@
 package tech.drainwalk.services.render;
 
+import lombok.experimental.UtilityClass;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.EXTPackedDepthStencil;
@@ -7,13 +8,14 @@ import tech.drainwalk.utils.Utils;
 
 import static org.lwjgl.opengl.GL11.*;
 
+@UtilityClass
 public class StencilService extends Utils {
 
     /*
      * Given to me by igs
      *                    */
 
-    public static void checkSetupFBO(Framebuffer framebuffer) {
+    public void checkSetupFBO(Framebuffer framebuffer) {
         if (framebuffer != null) {
             if (framebuffer.getDepthBuffer() > -1) {
                 setupFBO(framebuffer);
@@ -27,7 +29,7 @@ public class StencilService extends Utils {
      * @implNote Sets up the Framebuffer for Stencil use
      */
 
-    public static void setupFBO(Framebuffer framebuffer) {
+    public void setupFBO(Framebuffer framebuffer) {
         EXTFramebufferObject.glDeleteRenderbuffersEXT(framebuffer.getDepthBuffer());
         final int stencilDepthBufferID = EXTFramebufferObject.glGenRenderbuffersEXT();
         EXTFramebufferObject.glBindRenderbufferEXT(EXTFramebufferObject.GL_RENDERBUFFER_EXT, stencilDepthBufferID);
@@ -39,7 +41,7 @@ public class StencilService extends Utils {
     /**
      * @implNote Initializes the Stencil Buffer to write to
      */
-    public static void initStencilToWrite() {
+    public void initStencilToWrite() {
         //init
         mc.getFramebuffer().bindFramebuffer(false);
         checkSetupFBO(mc.getFramebuffer());
@@ -55,13 +57,13 @@ public class StencilService extends Utils {
      * @param ref (usually 1)
      * @implNote Reads the Stencil Buffer and stencils it onto everything until
      */
-    public static void readStencilBuffer(int ref) {
+    public void readStencilBuffer(int ref) {
         glColorMask(true, true, true, true);
         glStencilFunc(GL_EQUAL, ref, 1);
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     }
 
-    public static void uninitStencilBuffer() {
+    public void uninitStencilBuffer() {
         glDisable(GL_STENCIL_TEST);
     }
 }

@@ -1,18 +1,18 @@
-package tech.drainwalk.client.ui.components.impl;
+package tech.drainwalk.client.ui.dwmenu.components.impl;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.models.module.Module;
-import tech.drainwalk.client.ui.UIMain;
-import tech.drainwalk.client.ui.components.Component;
+import tech.drainwalk.client.ui.dwmenu.UIMain;
+import tech.drainwalk.client.ui.dwmenu.components.Component;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
 import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.services.render.RenderService;
-import tech.drainwalk.services.render.ScissorService;
 import tech.drainwalk.services.render.ScreenService;
+import tech.drainwalk.services.render.StencilService;
 
 import java.util.List;
 
@@ -39,16 +39,10 @@ public class ModulesComponent extends Component {
 
         scrollOffset += (targetScrollOffset - scrollOffset) * 0.2f;
 
-        float centerX = x + width / 2;
-        float centerY = y + height / 2;
-
-        float scaleValue = parent.getAnimation().getAnimationValue();
-        float scaledX = centerX - (centerX - x) * scaleValue;
-        float scaledY = centerY - (centerY - y) * scaleValue;
-        float scaledWidth = width * scaleValue;
-        float scaledHeight = height * scaleValue;
-
-//        ScissorService.enableScissor((int) scaledX, (int) scaledY, (int) scaledWidth, (int) scaledHeight);
+        // stencil
+        StencilService.initStencilToWrite();
+        RenderService.drawRect(matrixStack, x, y, width, height, -1);
+        StencilService.readStencilBuffer(1);
 
         float[] columnHeights = new float[COLUMNS];
         for (Module module : modules) {
@@ -102,7 +96,7 @@ public class ModulesComponent extends Component {
             columnHeights[column] += elementHeight + PADDING;
         }
 
-//        ScissorService.disableScissor();
+        StencilService.uninitStencilBuffer();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package tech.drainwalk.client.ui;
+package tech.drainwalk.client.ui.dwmenu;
 
 import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
@@ -19,20 +17,16 @@ import tech.drainwalk.api.impl.events.render.EventRender3D;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.IManager;
 import tech.drainwalk.api.impl.models.module.category.Category;
-import tech.drainwalk.client.modules.render.JumpCircles;
 import tech.drainwalk.client.theme.Theme;
 import tech.drainwalk.client.theme.ThemeSetting;
-import tech.drainwalk.client.ui.components.Component;
-import tech.drainwalk.client.ui.components.impl.HeaderComponent;
-import tech.drainwalk.client.ui.components.impl.LeftAreaComponent;
-import tech.drainwalk.client.ui.components.impl.MainComponent;
-import tech.drainwalk.client.ui.components.impl.ModulesComponent;
+import tech.drainwalk.client.ui.dwmenu.components.Component;
+import tech.drainwalk.client.ui.dwmenu.components.impl.HeaderComponent;
+import tech.drainwalk.client.ui.dwmenu.components.impl.LeftAreaComponent;
+import tech.drainwalk.client.ui.dwmenu.components.impl.MainComponent;
+import tech.drainwalk.client.ui.dwmenu.components.impl.ModulesComponent;
 import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.animation.EasingList;
-import tech.drainwalk.services.render.ColorService;
 import tech.drainwalk.services.render.GLService;
-import tech.drainwalk.services.render.RenderService;
-import tech.drainwalk.services.render.ScreenService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +53,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     private final float ROUND = 8;
 
     public UIMain() {
-        super(new StringTextComponent("DrainUI"));
+            super(new StringTextComponent("DrainUI"));
         direction = true;
     }
 
@@ -82,7 +76,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @Override
     public void render(@NonNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GLService.INSTANCE.rescale(1);
-        animation.animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
+        animation.animate(0, 1, 0.125f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
 
         matrixStack.push();
         final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
@@ -134,18 +128,13 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @Override
     public void closeScreen() {
         direction = false;
-        final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
-        final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
-
-        onClosePlayerPos = mc.player.getPositionVec().add(0, mc.player.getEyeHeight(), 0);
-
-        Vector3d lookVector = mc.player.getLookVec();
-
+        onClosePlayerPos = mc.gameRenderer.getActiveRenderInfo().getPos();
+        Vector3d lookVector = new Vector3d(mc.gameRenderer.getActiveRenderInfo().getViewVector());
         double offsetDistance = 7.0;
         onClosePlayerPos = onClosePlayerPos.add(lookVector.scale(offsetDistance));
         rotation = new Vector2f(mc.gameRenderer.getActiveRenderInfo().getYaw(), mc.gameRenderer.getActiveRenderInfo().getPitch());
         components.clear();
-        final float x = UI_WIDTH / -2; // Позиция в мировых координатах (относительная)
+        final float x = UI_WIDTH / -2;
         final float y = UI_HEIGHT / -2;
         register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
         register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
@@ -160,9 +149,10 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @EventTarget
     public void onRender3D(EventRender3D.PostAll event) {
         MatrixStack matrixStack = event.getMatrixStack();
-        animation.animate(0, 1, 0.15f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
+        animation.animate(0, 1, 0.125f, EasingList.BACK_OUT, mc.getTimer().renderPartialTicks);
 
         matrixStack.push();
+        RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
         event.getMatrixStack().translate(onClosePlayerPos.x - mc.getRenderManager().info.getProjectedView().getX(),
@@ -182,6 +172,8 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
 
         RenderSystem.enableCull();
         RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+
         matrixStack.pop();
     }
 

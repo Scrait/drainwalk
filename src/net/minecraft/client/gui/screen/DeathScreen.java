@@ -11,6 +11,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
 public class DeathScreen extends Screen
 {
@@ -89,7 +90,7 @@ public class DeathScreen extends Screen
         }
 
         this.minecraft.unloadWorld(new DirtMessageScreen(new TranslationTextComponent("menu.savingLevel")));
-        this.minecraft.displayGuiScreen(new MainMenuScreen());
+        this.minecraft.displayGuiScreen(new MainMenuUI());
     }
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)

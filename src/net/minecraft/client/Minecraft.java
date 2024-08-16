@@ -241,6 +241,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.drainwalk.Drainwalk;
 import tech.drainwalk.client.modules.misc.NoFriendDamage;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
 public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperInfo, IWindowEventListener
 {
@@ -528,11 +529,11 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
 
         if (s != null)
         {
-            this.displayGuiScreen(new ConnectingScreen(new MainMenuScreen(), this, s, i));
+            this.displayGuiScreen(new ConnectingScreen(new MainMenuUI(), this, s, i));
         }
         else
         {
-            this.displayGuiScreen(new MainMenuScreen(true));
+            this.displayGuiScreen(new MainMenuUI());
         }
 
         ResourceLoadProgressGui.loadLogoTexture(this);
@@ -967,7 +968,7 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
 
         if (guiScreenIn == null && this.world == null)
         {
-            guiScreenIn = new MainMenuScreen();
+            guiScreenIn = new MainMenuUI();
         }
         else if (guiScreenIn == null && this.player.getShouldBeDead())
         {
@@ -981,7 +982,7 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
             }
         }
 
-        if (guiScreenIn instanceof MainMenuScreen || guiScreenIn instanceof MultiplayerScreen)
+        if (guiScreenIn instanceof MainMenuUI || guiScreenIn instanceof MultiplayerScreen)
         {
             this.gameSettings.showDebugInfo = false;
             this.ingameGUI.getChatGUI().clearChatMessages(true);

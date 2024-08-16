@@ -1,4 +1,4 @@
-package tech.drainwalk.client.ui.components;
+package tech.drainwalk.client.ui.dwmenu.components;
 
 import com.mojang.blaze3d.systems.IRenderCall;
 import lombok.Getter;

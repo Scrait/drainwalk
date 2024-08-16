@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
 public class MemoryErrorScreen extends Screen
 {
@@ -16,7 +17,7 @@ public class MemoryErrorScreen extends Screen
     {
         this.addButton(new Button(this.width / 2 - 155, this.height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.toTitle"), (p_213048_1_) ->
         {
-            this.minecraft.displayGuiScreen(new MainMenuScreen());
+            this.minecraft.displayGuiScreen(new MainMenuUI());
         }));
         this.addButton(new Button(this.width / 2 - 155 + 160, this.height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("menu.quit"), (p_213047_1_) ->
         {

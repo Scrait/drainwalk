@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
 public class IngameMenuScreen extends Screen
 {
@@ -90,10 +91,10 @@ public class IngameMenuScreen extends Screen
 
             if (flag)
             {
-                this.minecraft.displayGuiScreen(new MainMenuScreen());
+                this.minecraft.displayGuiScreen(new MainMenuUI());
             }
             else {
-                this.minecraft.displayGuiScreen(new MultiplayerScreen(new MainMenuScreen()));
+                this.minecraft.displayGuiScreen(new MultiplayerScreen(new MainMenuUI()));
             }
         }));
 

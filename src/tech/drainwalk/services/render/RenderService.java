@@ -5,7 +5,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
+import org.lwjgl.opengl.GL11;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.IShaders;
 
@@ -25,7 +30,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         RenderSystem.color4f(0, 0, 0, 0);
         RenderSystem.enableBlend();
         RenderSystem.disableAlphaTest();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.param, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param, GlStateManager.SourceFactor.ONE.param, GlStateManager.DestFactor.ZERO.param);
+        RenderSystem.defaultBlendFunc();
 
         SHADOW.useProgram();
         SHADOW.setupUniform2f("size", (width - radius) * 2, (height - radius) * 2);
@@ -181,6 +186,39 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
 
         RenderSystem.disableBlend();
         RenderSystem.disableDepthTest();
+    }
+
+    public void drawImage(MatrixStack matrixStack, ResourceLocation resourceLocation, float x, float y, float width, float height,
+                                 int color1, int color2, int color3, int color4) {
+        float[] c1 = ColorService.getRGBAf(color2);
+        float[] c2 = ColorService.getRGBAf(color1);
+        float[] c3 = ColorService.getRGBAf(color4);
+        float[] c4 = ColorService.getRGBAf(color3);
+        Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+        RenderSystem.pushMatrix();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.shadeModel(7425);
+
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthFunc(GL11.GL_LEQUAL);
+
+        mc.getTextureManager().bindTexture(resourceLocation);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+        {
+            bufferbuilder.pos(matrix4f, x, y, 0).tex(0, 0).color(c1[0], c1[1], c1[2], c1[3]).endVertex();
+            bufferbuilder.pos(matrix4f, x, y + height, 0).tex(0, 1).color(c2[0], c2[1], c2[2], c2[3]).endVertex();
+            bufferbuilder.pos(matrix4f, x + width, y + height, 0).tex(1, 1).color(c3[0], c3[1], c3[2], c3[3]).endVertex();
+            bufferbuilder.pos(matrix4f, x + width, y, 0).tex(1, 0).color(c4[0], c4[1], c4[2], c4[3]).endVertex();
+        }
+        tessellator.draw();
+
+        RenderSystem.shadeModel(7424);
+        RenderSystem.colorMask(true, true, true, true);
+        RenderSystem.popMatrix();
     }
 
     public void drawProgressBar(MatrixStack matrixStack, float x, float y, float width, float height, float progress, int color) {

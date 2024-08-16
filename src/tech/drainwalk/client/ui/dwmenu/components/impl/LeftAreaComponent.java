@@ -1,9 +1,9 @@
-package tech.drainwalk.client.ui.components.impl;
+package tech.drainwalk.client.ui.dwmenu.components.impl;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import tech.drainwalk.api.impl.models.module.category.Category;
-import tech.drainwalk.client.ui.UIMain;
-import tech.drainwalk.client.ui.components.Component;
+import tech.drainwalk.client.ui.dwmenu.UIMain;
+import tech.drainwalk.client.ui.dwmenu.components.Component;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
 import tech.drainwalk.services.render.ColorService;

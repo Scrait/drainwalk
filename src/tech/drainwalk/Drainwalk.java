@@ -9,12 +9,11 @@ import tech.drainwalk.api.managers.DraggableManager;
 import tech.drainwalk.api.managers.ScriptManager;
 import tech.drainwalk.client.draggables.DraggableController;
 import tech.drainwalk.api.impl.models.ClientInfo;
-import tech.drainwalk.client.gui.modernui.MenuMain;
 import tech.drainwalk.client.profile.Profile;
 import tech.drainwalk.client.font.FontManager;
 import lombok.Getter;
 import lombok.Setter;
-import tech.drainwalk.client.ui.UIMain;
+import tech.drainwalk.client.ui.dwmenu.UIMain;
 
 public class Drainwalk implements IInstanceAccess {
 

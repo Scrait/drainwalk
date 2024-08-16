@@ -306,6 +306,7 @@ import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.drainwalk.api.impl.events.player.EventTeleport;
+import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
 public class ClientPlayNetHandler implements IClientPlayNetHandler
 {
@@ -1021,7 +1022,7 @@ public class ClientPlayNetHandler implements IClientPlayNetHandler
         }
         else
         {
-            this.client.displayGuiScreen(new DisconnectedScreen(new MultiplayerScreen(new MainMenuScreen()), field_243491_b, reason));
+            this.client.displayGuiScreen(new DisconnectedScreen(new MultiplayerScreen(new MainMenuUI()), field_243491_b, reason));
         }
     }
 

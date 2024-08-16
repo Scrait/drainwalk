@@ -1,4 +1,4 @@
-package tech.drainwalk.client.ui.components;
+package tech.drainwalk.client.ui.dwmenu.components;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 import tech.drainwalk.api.impl.interfaces.IFonts;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.ITheme;
-import tech.drainwalk.client.ui.UIMain;
+import tech.drainwalk.client.ui.dwmenu.UIMain;
 
 @Getter
 public abstract class Component implements IInstanceAccess, ITheme, IFonts {
