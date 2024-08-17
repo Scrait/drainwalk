@@ -20,6 +20,7 @@ import net.minecraft.world.LightType;
 import net.optifine.util.Either;
 import tech.drainwalk.Drainwalk;
 import tech.drainwalk.client.modules.render.NameTags;
+import tech.drainwalk.services.lootbeams.LootBeamController;
 
 public abstract class EntityRenderer<T extends Entity> implements net.optifine.entity.model.IEntityRenderer
 {
@@ -80,6 +81,7 @@ public abstract class EntityRenderer<T extends Entity> implements net.optifine.e
 
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
     {
+        LootBeamController.onRenderNameplate(matrixStackIn, bufferIn, partialTicks, entityIn);
         if (this.canRenderName(entityIn))
         {
             this.renderName(entityIn, entityIn.getDisplayName(), matrixStackIn, bufferIn, packedLightIn);
