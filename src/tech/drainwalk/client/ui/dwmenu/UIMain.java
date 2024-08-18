@@ -130,7 +130,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         direction = false;
         onClosePlayerPos = mc.gameRenderer.getActiveRenderInfo().getPos();
         Vector3d lookVector = new Vector3d(mc.gameRenderer.getActiveRenderInfo().getViewVector());
-        double offsetDistance = 7.0;
+        double offsetDistance = 7.5f * mc.getMainWindow().getFramebufferHeight() / 1080.0f;
         onClosePlayerPos = onClosePlayerPos.add(lookVector.scale(offsetDistance));
         rotation = new Vector2f(mc.gameRenderer.getActiveRenderInfo().getYaw(), mc.gameRenderer.getActiveRenderInfo().getPitch());
         components.clear();
