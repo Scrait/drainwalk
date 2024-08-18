@@ -18,6 +18,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tech.drainwalk.services.chatheads.controllers.ChatComponentController;
 
 public class NewChatGui extends AbstractGui
 {
@@ -76,6 +77,7 @@ public class NewChatGui extends AbstractGui
                 for (int j1 = 0; j1 + this.scrollPos < this.drawnChatLines.size() && j1 < j; ++j1)
                 {
                     ChatLine<IReorderingProcessor> chatline = this.drawnChatLines.get(j1 + this.scrollPos);
+                    chatline = ChatComponentController.captureGuiMessage(chatline);
 
                     if (chatline != null)
                     {
@@ -114,7 +116,10 @@ public class NewChatGui extends AbstractGui
                                 }
                                 else
                                 {
-                                    this.mc.fontRenderer.func_238407_a_(p_238492_1_, chatline.getLineString(), 0.0F, (float)((int)(d6 + d4)), 16777215 + (i2 << 24));
+                                    float yPosition = (float)((int)(d6 + d4));
+                                    int color = 16777215 + (i2 << 24);
+                                    this.mc.fontRenderer.func_238407_a_(p_238492_1_, chatline.getLineString(), ChatComponentController.moveTheText(yPosition, color), yPosition, color);
+                                    ChatComponentController.render(p_238492_1_);
                                 }
 
                                 RenderSystem.disableAlphaTest();
@@ -210,12 +215,14 @@ public class NewChatGui extends AbstractGui
 
     private void func_238493_a_(ITextComponent p_238493_1_, int p_238493_2_, int p_238493_3_, boolean p_238493_4_)
     {
+        ChatComponentController.detectNewMessage();
+
         if (p_238493_2_ != 0)
         {
             this.deleteChatLine(p_238493_2_);
         }
 
-        int i = MathHelper.floor((double)this.getChatWidth() / this.getScale());
+        int i = MathHelper.floor((double)ChatComponentController.fixTextOverflow() / this.getScale());
         List<IReorderingProcessor> list = RenderComponentsUtil.func_238505_a_(p_238493_1_, i, this.mc.fontRenderer);
         boolean flag = this.getChatOpen();
 
@@ -345,7 +352,9 @@ public class NewChatGui extends AbstractGui
                     if (j >= 0 && j < this.drawnChatLines.size())
                     {
                         ChatLine<IReorderingProcessor> chatline = this.drawnChatLines.get(j);
-                        return this.mc.fontRenderer.getCharacterManager().func_243239_a(chatline.getLineString(), (int)d0);
+
+                        int correctedX = ChatComponentController.correctClickPosition((int)d0);
+                        return this.mc.fontRenderer.getCharacterManager().func_243239_a(chatline.getLineString(), correctedX);
                     }
                 }
 

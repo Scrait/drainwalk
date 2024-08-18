@@ -6,6 +6,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import java.util.Set;
 import javax.annotation.Nullable;
+
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.glfw.GLFW;
+import tech.drainwalk.services.highlighter.controllers.ContainerScreenController;
 import tech.drainwalk.utils.time.Timer;
 
 public abstract class ContainerScreen<T extends Container> extends Screen implements IHasContainer<T>
@@ -45,6 +48,7 @@ public abstract class ContainerScreen<T extends Container> extends Screen implem
     @Nullable
 
     /** Holds the slot currently hovered */
+    @Getter
     protected Slot hoveredSlot;
     @Nullable
 
@@ -305,6 +309,7 @@ public abstract class ContainerScreen<T extends Container> extends Screen implem
             RenderSystem.enableDepthTest();
             this.itemRenderer.renderItemAndEffectIntoGUI(this.minecraft.player, itemstack, i, j);
             this.itemRenderer.renderItemOverlayIntoGUI(this.font, itemstack, i, j, s);
+            ContainerScreenController.renderSlot(matrixStack, slot);
         }
 
         this.itemRenderer.zLevel = 0.0F;

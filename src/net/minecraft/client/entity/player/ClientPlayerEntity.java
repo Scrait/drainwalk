@@ -86,8 +86,8 @@ import tech.drainwalk.api.impl.events.movement.EventNoSlow;
 import tech.drainwalk.api.impl.events.packet.EventMessage;
 import tech.drainwalk.api.impl.events.player.EventEntitySync;
 import tech.drainwalk.api.impl.events.player.EventMove;
-import tech.drainwalk.utils.cape.CapeHolder;
-import tech.drainwalk.utils.cape.sim.StickSimulation;
+import tech.drainwalk.services.cape.CapeHolder;
+import tech.drainwalk.services.cape.sim.StickSimulation;
 
 public class ClientPlayerEntity extends AbstractClientPlayerEntity implements CapeHolder
 {

@@ -1,5 +1,6 @@
 package net.minecraft.client.gui.screen;
 
+import com.darkmagician6.eventapi.EventManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -40,6 +41,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tech.drainwalk.api.impl.events.player.ItemTooltipEvent;
 
 public abstract class Screen extends FocusableGui implements IScreen, IRenderable
 {
@@ -128,6 +130,8 @@ public abstract class Screen extends FocusableGui implements IScreen, IRenderabl
 
     protected void renderTooltip(MatrixStack matrixStack, ItemStack itemStack, int mouseX, int mouseY)
     {
+        final ItemTooltipEvent event = new ItemTooltipEvent(itemStack);
+        EventManager.call(event);
         this.func_243308_b(matrixStack, this.getTooltipFromItem(itemStack), mouseX, mouseY);
     }
 

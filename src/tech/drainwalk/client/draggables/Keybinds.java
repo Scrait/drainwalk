@@ -70,7 +70,7 @@ public class Keybinds extends DraggableComponent {
         try {
             moduleMax = Collections.max(dw.getApiMain().getModuleManager().stream().
                     filter(Module::isEnabled).filter(Module::hasBind).toList(), Comparator.comparing(s -> SFPD_REGULAR.getWidth(s.getName() + getKeyString(s), FONT_SIZE)));
-            final float width = SFPD_REGULAR.getWidth(moduleMax.getName() + getKeyString(moduleMax), FONT_SIZE) + 50 + padding.getValue();
+            final float width = SFPD_REGULAR.getWidth(moduleMax.getName() + getKeyString(moduleMax), FONT_SIZE) + 30 + padding.getValue();
             widthAnim = AnimationService.animation(widthAnim, width, (float) (Timer.deltaTime()));
         } catch (NoSuchElementException ignored) {
         }

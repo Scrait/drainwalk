@@ -7,8 +7,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import tech.drainwalk.utils.cape.CapeHolder;
-import tech.drainwalk.utils.cape.sim.StickSimulation;
+import tech.drainwalk.services.cape.CapeHolder;
+import tech.drainwalk.services.cape.sim.StickSimulation;
 
 public class RemoteClientPlayerEntity extends AbstractClientPlayerEntity implements CapeHolder
 {

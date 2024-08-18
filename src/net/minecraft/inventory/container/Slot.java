@@ -2,6 +2,8 @@ package net.minecraft.inventory.container;
 
 import com.mojang.datafixers.util.Pair;
 import javax.annotation.Nullable;
+
+import lombok.Getter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -9,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class Slot
 {
+    @Getter
     private final int slotIndex;
     public final IInventory inventory;
     public int slotNumber;

@@ -119,6 +119,7 @@ import net.minecraft.world.server.ServerWorld;
 import tech.drainwalk.Drainwalk;
 import tech.drainwalk.api.impl.events.modules.NoPushEvent;
 import tech.drainwalk.api.impl.events.movement.JumpEvent;
+import tech.drainwalk.api.impl.events.player.EntityItemPickupEvent;
 import tech.drainwalk.api.impl.events.player.EventEntityDeath;
 
 public abstract class LivingEntity extends Entity
@@ -3486,6 +3487,9 @@ public abstract class LivingEntity extends Entity
     public void triggerItemPickupTrigger(ItemEntity item)
     {
         PlayerEntity playerentity = item.getThrowerId() != null ? this.world.getPlayerByUuid(item.getThrowerId()) : null;
+
+        final EntityItemPickupEvent event = new EntityItemPickupEvent(playerentity, item);
+        EventManager.call(event);
 
         if (playerentity instanceof ServerPlayerEntity)
         {

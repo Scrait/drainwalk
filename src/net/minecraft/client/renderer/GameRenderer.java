@@ -674,7 +674,8 @@ public class GameRenderer implements IResourceManagerReloadListener, AutoCloseab
             matrixstack.scale(this.cameraZoom, this.cameraZoom, 1.0F);
         }
 
-        matrixstack.getLast().getMatrix().mul(Matrix4f.perspective(this.getFOVModifier(activeRenderInfoIn, partialTicks, useFovSetting), (float)this.mc.getMainWindow().getFramebufferWidth() / (float)this.mc.getMainWindow().getFramebufferHeight(), 0.05F, this.clipDistance));
+        final float aspectRatio = 1;
+        matrixstack.getLast().getMatrix().mul(Matrix4f.perspective(this.getFOVModifier(activeRenderInfoIn, partialTicks, useFovSetting), ((float)this.mc.getMainWindow().getFramebufferWidth() / (float)this.mc.getMainWindow().getFramebufferHeight()) / aspectRatio, 0.05F, this.clipDistance));
         return matrixstack.getLast().getMatrix();
     }
 

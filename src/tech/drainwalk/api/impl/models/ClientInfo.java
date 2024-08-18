@@ -7,9 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ClientInfo {
 
-    private String CLIENT_NAME;
-    private String BUILD;
-    private String RELEASE_TYPE;
-    private String VERSION;
+    private final String CLIENT_NAME;
+    private final String CLIENT_TYPE;
+    private final String BUILD;
+    private final String RELEASE_TYPE;
+    private final String VERSION;
 
 }

@@ -1,10 +1,10 @@
-package tech.drainwalk.utils.cape;
+package tech.drainwalk.services.cape;
 
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import tech.drainwalk.utils.cape.sim.StickSimulation;
-import tech.drainwalk.utils.cape.sim.StickSimulation.Point;
-import tech.drainwalk.utils.cape.sim.StickSimulation.Stick;
+import tech.drainwalk.services.cape.sim.StickSimulation;
+import tech.drainwalk.services.cape.sim.StickSimulation.Point;
+import tech.drainwalk.services.cape.sim.StickSimulation.Stick;
 
 public interface CapeHolder {
     public StickSimulation getSimulation();

@@ -1,5 +1,6 @@
 package tech.drainwalk;
 
+import com.darkmagician6.eventapi.EventManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.drainwalk.api.ApiMain;
@@ -14,6 +15,7 @@ import tech.drainwalk.client.font.FontManager;
 import lombok.Getter;
 import lombok.Setter;
 import tech.drainwalk.client.ui.dwmenu.UIMain;
+import tech.drainwalk.services.highlighter.Highlighter;
 
 public class Drainwalk implements IInstanceAccess {
 
@@ -26,9 +28,17 @@ public class Drainwalk implements IInstanceAccess {
     @Getter
     private final ClientInfo clientInfo = new ClientInfo(
             "drainwalk",
+            "Innovative",
             "1 august 2023",
             "Nightly",
             "3.0"
+    );
+    @Getter
+    private final Profile profile = new Profile(
+            1,
+            "Scrait",
+            "Beta",
+            "Baron"
     );
     @Getter
     private final ApiMain apiMain;
@@ -40,8 +50,6 @@ public class Drainwalk implements IInstanceAccess {
     private final DraggableController draggableController;
     @Getter
     private final UIMain uiMain;
-    @Getter
-    private final Profile profile;
 
     private Drainwalk() {
         instance = this;
@@ -54,9 +62,11 @@ public class Drainwalk implements IInstanceAccess {
         scriptManager = new ScriptManager();
         LOGGER.info("Init api");
         draggableController = new DraggableController();
-        profile = new Profile("Scrait", 0, "999 days", "Шеф");
         uiMain = new UIMain();
         LOGGER.info("End of init");
+
+        // mods
+        EventManager.register(new Highlighter());
     }
 
 }

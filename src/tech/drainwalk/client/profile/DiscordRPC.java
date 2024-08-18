@@ -18,8 +18,8 @@ public class DiscordRPC implements IInstanceAccess {
         discordRichPresence.largeImageKey = "https://i.imgur.com/eFInOAq.gif";
         discordRichPresence.largeImageText = dw.getClientInfo().getCLIENT_NAME() + " " + dw.getClientInfo().getRELEASE_TYPE() +  " " + dw.getClientInfo().getVERSION();
         discordRichPresence.smallImageKey = "https://i.imgur.com/e3n1aFW.gif";
-        discordRichPresence.smallImageText = "UID: " + dw.getProfile().getUid() + " | Login: " + dw.getProfile().getUsername();
-        discordRichPresence.details = "Role: " + dw.getProfile().getRole();
+        discordRichPresence.smallImageText = "UID: " + dw.getProfile().getID() + " | Login: " + dw.getProfile().getUSERNAME();
+        discordRichPresence.details = "Role: " + dw.getProfile().getROLE();
         new Thread(() -> {
             while (true) {
                 try {

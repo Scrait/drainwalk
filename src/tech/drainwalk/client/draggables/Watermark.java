@@ -38,9 +38,9 @@ public class Watermark extends DraggableComponent {
         final ITextComponent dot = new StringTextComponent("   •   ").setStyle(dotsStyle);
         final ITextComponent text = new StringTextComponent("").
                 append(dot).
-                append(new StringTextComponent(dw.getProfile().getUsername()).setStyle(textFirstStyle)).
+                append(new StringTextComponent(dw.getProfile().getUSERNAME()).setStyle(textFirstStyle)).
                 append(new StringTextComponent(" [").setStyle(squareBracketsStyle)).
-                append(new StringTextComponent(dw.getProfile().getRole()).setStyle(textSecondStyle)).
+                append(new StringTextComponent(dw.getProfile().getROLE()).setStyle(textSecondStyle)).
                 append(new StringTextComponent("]").setStyle(squareBracketsStyle)).
                 append(dot).
                 append(new StringTextComponent(String.valueOf((int) fps)).setStyle(textFirstStyle)).

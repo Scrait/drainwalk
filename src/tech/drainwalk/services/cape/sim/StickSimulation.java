@@ -1,4 +1,4 @@
-package tech.drainwalk.utils.cape.sim;
+package tech.drainwalk.services.cape.sim;
 
 import net.minecraft.util.math.MathHelper;
 

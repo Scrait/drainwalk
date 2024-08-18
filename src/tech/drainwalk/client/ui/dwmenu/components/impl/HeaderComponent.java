@@ -13,10 +13,10 @@ public class HeaderComponent extends Component {
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         final float PADDING = 16f;
-        SFPD_MEDIUM.drawText(matrixStack, parent.getSelectedCategory().getName(), x + PADDING, y + PADDING + 2, textFirstColor, 18);
+        SFPD_MEDIUM.drawText(matrixStack, parent.getSelectedCategory().getName(), x + PADDING, y + PADDING + 3, textFirstColor, 18);
         SFPD_MEDIUM.drawText(matrixStack, " (" + dw.getApiMain().getModuleManager().stream()
                 .filter(module -> module.getCategory() == parent.getSelectedCategory())
-                .toList().size() + ")", x + PADDING + SFPD_MEDIUM.getWidth(parent.getSelectedCategory().getName(), 18), y + PADDING + 5, textFirstColor, 14);
+                .toList().size() + ")", x + PADDING + SFPD_MEDIUM.getWidth(parent.getSelectedCategory().getName(), 18), y + PADDING + 6, textFirstColor, 14);
     }
 
     @Override

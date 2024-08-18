@@ -1,4 +1,4 @@
-package tech.drainwalk.utils.cape;
+package tech.drainwalk.services.cape;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

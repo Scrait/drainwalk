@@ -37,6 +37,7 @@ import net.optifine.shaders.Shaders;
 import net.optifine.shaders.gui.GuiShaderOptions;
 import tech.drainwalk.Drainwalk;
 import tech.drainwalk.api.impl.models.module.Module;
+import tech.drainwalk.services.chatheads.controllers.KeyboardHandlerController;
 
 public class KeyboardListener
 {
@@ -55,11 +56,13 @@ public class KeyboardListener
 
     private void printDebugMessage(String message, Object... args)
     {
+        KeyboardHandlerController.debugErrorReset();
         this.mc.ingameGUI.getChatGUI().printChatMessage((new StringTextComponent("")).append((new TranslationTextComponent("debug.prefix")).mergeStyle(new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.BOLD})).appendString(" ").append(new TranslationTextComponent(message, args)));
     }
 
     private void printDebugWarning(String message, Object... args)
     {
+        KeyboardHandlerController.debugWarnReset();
         this.mc.ingameGUI.getChatGUI().printChatMessage((new StringTextComponent("")).append((new TranslationTextComponent("debug.prefix")).mergeStyle(new TextFormatting[] {TextFormatting.RED, TextFormatting.BOLD})).appendString(" ").append(new TranslationTextComponent(message, args)));
     }
 

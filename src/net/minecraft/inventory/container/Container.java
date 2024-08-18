@@ -22,6 +22,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import tech.drainwalk.services.highlighter.controllers.ContainerController;
 
 public abstract class Container
 {
@@ -202,6 +203,7 @@ public abstract class Container
     {
         try
         {
+            if (this instanceof PlayerContainer) ContainerController.doClick(slotId);
             return this.func_241440_b_(slotId, dragType, clickTypeIn, player);
         }
         catch (Exception exception)

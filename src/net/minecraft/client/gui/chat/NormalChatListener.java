@@ -4,6 +4,7 @@ import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
+import tech.drainwalk.services.chatheads.controllers.StandardChatListenerController;
 
 public class NormalChatListener implements IChatListener
 {
@@ -20,6 +21,7 @@ public class NormalChatListener implements IChatListener
      */
     public void say(ChatType chatTypeIn, ITextComponent message, UUID sender)
     {
+        StandardChatListenerController.onChatMessage(message, sender);
         if (chatTypeIn != ChatType.CHAT)
         {
             this.mc.ingameGUI.getChatGUI().printChatMessage(message);

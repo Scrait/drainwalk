@@ -36,13 +36,13 @@ public class LeftAreaComponent extends Component {
 
             final boolean selected = parent.getSelectedCategory() == category;
             final boolean hovered = ScreenService.isHovered(mouseX, mouseY, x, y + offset, 32, 32);
-            int iconColor = hovered ? ColorService.getColorWithAlpha(textSecondColor, 0.5f) : ColorService.getColorWithAlpha(textSecondColor, 0.2f);
+            int iconColor = hovered ? ColorService.getColorWithAlpha(textSecondColor, 0.4f) : ColorService.getColorWithAlpha(textSecondColor, 0.2f);
             iconColor = selected ?
-                    ColorService.getColorWithAlpha(additionalSecondColor, 0.5f + 0.5f * category.getAnimation().getAnimationValue()) :
+                    ColorService.getColorWithAlpha(additionalSecondColor, 0.4f + 0.6f * category.getAnimation().getAnimationValue()) :
                     iconColor;
-            int rectColor = hovered ? ColorService.getColorWithAlpha(additionalSecondColor, 0.11f) : 0;
+            int rectColor = hovered ? ColorService.getColorWithAlpha(additionalSecondColor, 0.05f) : 0;
             rectColor = selected ?
-                    ColorService.getColorWithAlpha(additionalSecondColor, 0.11f + 0.09f * category.getAnimation().getAnimationValue()) :
+                    ColorService.getColorWithAlpha(additionalSecondColor, 0.05f + 0.15f * category.getAnimation().getAnimationValue()) :
                     rectColor;
 
             RenderService.drawRoundedRect(matrixStack, x, y + offset, 32, 32, 6, rectColor);

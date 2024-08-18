@@ -180,6 +180,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @EventTarget
     public void onUpdate(UpdateEvent ignoredEvent) {
         animation.update(false);
+        components.forEach(Component::tick);
         if (animation.getValue() == 0 && animation.getPrevValue() == 0) {
             EventManager.unregister(this);
         }

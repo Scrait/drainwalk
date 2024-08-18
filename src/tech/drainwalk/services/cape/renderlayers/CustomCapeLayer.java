@@ -1,4 +1,4 @@
-package tech.drainwalk.utils.cape.renderlayers;
+package tech.drainwalk.services.cape.renderlayers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,10 +18,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
-import tech.drainwalk.utils.cape.CapeHolder;
-import tech.drainwalk.utils.cape.CapeRenderer;
-import tech.drainwalk.utils.cape.VanillaCapeRenderer;
-import tech.drainwalk.utils.cape.sim.StickSimulation;
+import tech.drainwalk.services.cape.CapeHolder;
+import tech.drainwalk.services.cape.CapeRenderer;
+import tech.drainwalk.services.cape.VanillaCapeRenderer;
+import tech.drainwalk.services.cape.sim.StickSimulation;
 import tech.drainwalk.utils.minecraft.CastUtil;
 
 public class CustomCapeLayer extends LayerRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>>

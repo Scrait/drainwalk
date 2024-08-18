@@ -50,37 +50,47 @@ public class ESP extends Module implements ITheme {
 
         Vector3d center = boundingBox.getCenter();
 
+        // Преобразуем позицию в экранные координаты
         Vector2f screenPos = ScreenService.worldToScreen(center);
         screenPos = new Vector2f((float) (screenPos.x * mc.getMainWindow().getGuiScaleFactor()), (float) (screenPos.y * mc.getMainWindow().getGuiScaleFactor()));
 
         if (screenPos.x != Float.MAX_VALUE && screenPos.y != Float.MAX_VALUE) {
             double distance = mc.getRenderManager().info.getProjectedView().distanceTo(center);
+
+            // Получаем текущее разрешение экрана
+            float screenWidth = (float) mc.getMainWindow().getFramebufferWidth();
+            float screenHeight = (float) mc.getMainWindow().getFramebufferHeight();
+            float aspectRatio = screenWidth / screenHeight;
+
+            // Модифицируем масштаб на основе разрешения экрана
             float scaleFactor = (float) (1 / distance) * 100;
             if (Config.zoomMode) scaleFactor *= 4;
 
-            float width = 9 * scaleFactor;
-            float height = 16 * scaleFactor;
+            // Масштабирование ESP на основе разрешения экрана
+            float normalizedScaleFactor = scaleFactor * screenHeight / 1080.0f; // 1080 - базовое разрешение
+            float width = 9 * normalizedScaleFactor;
+            float height = 16 * normalizedScaleFactor;
 
-            float cornerSize = 3 * scaleFactor;
+            float cornerSize = 3 * normalizedScaleFactor;
 
             // Левый верхний угол
             ScissorService.enableScissor((int) (screenPos.x - width / 2), (int) (screenPos.y - height / 2), (int) cornerSize, (int) cornerSize);
-            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 2, 3, backgroundFirstColor, backgroundSecondColor);
+            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 3, 3, backgroundFirstColor, backgroundSecondColor);
             ScissorService.disableScissor();
 
             // Правый верхний угол
             ScissorService.enableScissor((int) (screenPos.x + width / 2 - cornerSize), (int) (screenPos.y - height / 2), (int) cornerSize, (int) cornerSize);
-            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 2, 3, backgroundFirstColor, backgroundSecondColor);
+            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 3, 3, backgroundFirstColor, backgroundSecondColor);
             ScissorService.disableScissor();
 
             // Левый нижний угол
             ScissorService.enableScissor((int) (screenPos.x - width / 2), (int) (screenPos.y + height / 2 - cornerSize), (int) cornerSize, (int) cornerSize);
-            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 2, 3, backgroundFirstColor, backgroundSecondColor);
+            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 3, 3, backgroundFirstColor, backgroundSecondColor);
             ScissorService.disableScissor();
 
             // Правый нижний угол
             ScissorService.enableScissor((int) (screenPos.x + width / 2 - cornerSize), (int) (screenPos.y + height / 2 - cornerSize), (int) cornerSize, (int) cornerSize);
-            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 2, 3, backgroundFirstColor, backgroundSecondColor);
+            RenderService.drawRoundedOutlineDiagonalGradientRect(matrixStack, screenPos.x - width / 2, screenPos.y - height / 2, width, height, 3, 3, backgroundFirstColor, backgroundSecondColor);
             ScissorService.disableScissor();
         }
     }

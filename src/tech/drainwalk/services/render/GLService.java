@@ -38,6 +38,13 @@ public class GLService implements IInstanceAccess {
         matrixStack.translate(-(x + width / 2), -(y + height / 2), 0);
     }
 
+    public void scaleAnimationHeight(MatrixStack matrixStack, float x, float y, float width, float height, float scaleValue) {
+        matrixStack.translate((x + width / 2), (y + height / 2), 0);
+        matrixStack.scale(1.0f, scaleValue, 1.0f);
+        matrixStack.translate(-(x + width / 2), -(y + height / 2), 0);
+    }
+
+
     public void scaleAnimation(float x, float y, float width, float height, float scaleValue) {
         RenderSystem.translatef((x + width / 2), (y + height / 2), 0);
         RenderSystem.scalef(scaleValue, scaleValue, scaleValue);

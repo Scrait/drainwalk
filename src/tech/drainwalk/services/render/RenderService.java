@@ -87,6 +87,8 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         RenderSystem.color4f(0, 0, 0, 0);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.alphaFunc(GL11.GL_GREATER, 0.0f);
         ROUNDED_GRADIENT.useProgram();
         ROUNDED_GRADIENT.setupUniform2f("size", width, height);
         ROUNDED_GRADIENT.setupUniform4f("round", roundTopLeft, roundTopRight, roundBottomRight, roundBottomLeft);
@@ -98,6 +100,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         allocateTextureRect(matrixStack, x, y, width, height);
 
         ROUNDED_GRADIENT.unloadProgram();
+        RenderSystem.disableAlphaTest();
         RenderSystem.disableBlend();
     }
 
@@ -131,6 +134,8 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         RenderSystem.color4f(0, 0, 0, 0);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.alphaFunc(GL11.GL_GREATER, 0.0f);
         ROUNDED_OUTLINE.useProgram();
         ROUNDED_OUTLINE.setupUniform2f("size", width, height);
         ROUNDED_OUTLINE.setupUniform4f("round", roundTopLeft, roundTopRight, roundBottomRight, roundBottomLeft);
@@ -143,6 +148,7 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         allocateTextureRect(matrixStack, x, y, width, height);
 
         ROUNDED_OUTLINE.unloadProgram();
+        RenderSystem.disableAlphaTest();
         RenderSystem.disableBlend();
     }
 

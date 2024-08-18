@@ -299,6 +299,7 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
     private final ResourcePackList resourcePackRepository;
     private final LanguageManager languageManager;
     private final BlockColors blockColors;
+    @Getter
     private final ItemColors itemColors;
     private final Framebuffer framebuffer;
     private final SoundHandler soundHandler;

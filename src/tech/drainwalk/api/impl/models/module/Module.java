@@ -52,6 +52,9 @@ public class Module implements IInstanceAccess {
     @Setter
     private float inter2;
     private final Sound sound = new Sound();
+    @Getter
+    @Setter
+    private boolean optionsOpened;
 
     public Module(String name, Category category) {
         this.name = name;

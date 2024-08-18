@@ -79,7 +79,7 @@ public class Potions extends DraggableComponent {
                             s -> SFPD_REGULAR.getWidth(
                                     getPotionString(s), FONT_SIZE)
                     ));
-            final float width = SFPD_REGULAR.getWidth(getPotionString(potionMax), FONT_SIZE) + 10 + padding.getValue();
+            final float width = SFPD_REGULAR.getWidth(getPotionString(potionMax), FONT_SIZE) + 30 + padding.getValue();
             widthAnim = AnimationService.animation(widthAnim, width, (float) (Timer.deltaTime()));
         } catch (NoSuchElementException ignored) {
         }
