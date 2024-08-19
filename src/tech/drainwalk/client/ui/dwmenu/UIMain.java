@@ -12,6 +12,7 @@ import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.StringTextComponent;
+import tech.drainwalk.api.impl.events.TickEvent;
 import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.events.render.EventRender3D;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
@@ -27,6 +28,7 @@ import tech.drainwalk.client.ui.dwmenu.components.impl.ModulesComponent;
 import tech.drainwalk.services.animation.Animation;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.render.GLService;
+import tech.drainwalk.services.render.ScreenService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     private final float ROUND = 8;
 
     public UIMain() {
-            super(new StringTextComponent("DrainUI"));
+        super(new StringTextComponent("DrainUI"));
         direction = true;
     }
 
@@ -86,7 +88,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         GLService.INSTANCE.scaleAnimation(matrixStack, x, y, UI_WIDTH, UI_HEIGHT, animation.getAnimationValue());
 
         final Vector2f fixedMouseCords = GLService.INSTANCE.normalizeCords(mouseX, mouseY, 1);
-        components.forEach(component -> component.render(matrixStack, (int) fixedMouseCords.x, (int) fixedMouseCords.y, partialTicks));
+        components.forEach(component -> component.renderWithCursorLogic(matrixStack, (int) fixedMouseCords.x, (int) fixedMouseCords.y, partialTicks));
 
         matrixStack.pop();
 
@@ -95,6 +97,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
 
     @Override
     public void tick() {
+        if (components.stream().filter(Component::isSomeElementHovered).toList().isEmpty()) ScreenService.setArrowCursor();
         direction = true;
         animation.update(true);
         components.forEach(Component::tick);
@@ -133,13 +136,19 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         double offsetDistance = 7.5f * mc.getMainWindow().getFramebufferHeight() / 1080.0f;
         onClosePlayerPos = onClosePlayerPos.add(lookVector.scale(offsetDistance));
         rotation = new Vector2f(mc.gameRenderer.getActiveRenderInfo().getYaw(), mc.gameRenderer.getActiveRenderInfo().getPitch());
-        components.clear();
+//        components.clear();
         final float x = UI_WIDTH / -2;
         final float y = UI_HEIGHT / -2;
-        register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
-        register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
-        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
-        register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
+        final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
+        final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
+        final float oldX = width / 2 - UI_WIDTH / 2;
+        final float oldY = height / 2 - UI_HEIGHT / 2;
+        components.forEach(component -> component.setX(component.getX() - oldX + x));
+        components.forEach(component -> component.setY(component.getY() - oldY + y));
+//        register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
+//        register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
+//        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
+//        register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
         EventManager.register(this);
         super.closeScreen();
     }
@@ -168,7 +177,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
         GLService.INSTANCE.scaleAnimation(matrixStack, x, y, UI_WIDTH, UI_HEIGHT, animation.getAnimationValue());
 
         final Vector2f fixedMouseCords = GLService.INSTANCE.normalizeCords(mc.mouseHelper.getMouseX(), mc.mouseHelper.getMouseY(), 1);
-        components.forEach(component -> component.render(matrixStack, (int) fixedMouseCords.x, (int) fixedMouseCords.y, event.getPartialTicks()));
+        components.forEach(component -> component.renderWithCursorLogic(matrixStack, (int) fixedMouseCords.x, (int) fixedMouseCords.y, event.getPartialTicks()));
 
         RenderSystem.enableCull();
         RenderSystem.depthMask(true);
@@ -178,7 +187,8 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     }
 
     @EventTarget
-    public void onUpdate(UpdateEvent ignoredEvent) {
+    public void onTick(TickEvent ignoredEvent) {
+        if (components.stream().filter(Component::isSomeElementHovered).toList().isEmpty()) ScreenService.setArrowCursor();
         animation.update(false);
         components.forEach(Component::tick);
         if (animation.getValue() == 0 && animation.getPrevValue() == 0) {

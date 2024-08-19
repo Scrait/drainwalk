@@ -8,6 +8,7 @@ import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 
 @UtilityClass
@@ -92,6 +93,20 @@ public class ScreenService implements IInstanceAccess {
 
     public boolean isHovered(int mX, int mY, float x, float y, float width, float height) {
         return (mX > x && mX < (x + width)) && (mY > y && mY < (y + height));
+    }
+
+    public void handleCursor(int mX, int mY, float x, float y, float width, float height) {
+        if (isHovered(mX, mY, x, y, width, height)) {
+            setHandCursor();
+        }
+    }
+
+    public void setHandCursor() {
+        GLFW.glfwSetCursor(mc.getMainWindow().getHandle(), GLFW.glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR));
+    }
+
+    public void setArrowCursor() {
+        GLFW.glfwSetCursor(mc.getMainWindow().getHandle(), GLFW.glfwCreateStandardCursor(GLFW.GLFW_ARROW_CURSOR));
     }
 
 }

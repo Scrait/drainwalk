@@ -47,6 +47,9 @@ public class LeftAreaComponent extends Component {
 
             RenderService.drawRoundedRect(matrixStack, x, y + offset, 32, 32, 6, rectColor);
             ICONS.drawCenteredText(matrixStack, category.getIcon().getSymbolString(), x + (float) 32 / 2, y + offset + 5, iconColor, 24);
+
+            cursorLogic(mouseX, mouseY, x, y + offset, 32, 32);
+
             offset += 42;
         }
     }

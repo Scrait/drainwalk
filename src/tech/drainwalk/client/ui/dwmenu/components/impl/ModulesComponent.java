@@ -7,16 +7,20 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.models.module.Module;
+import tech.drainwalk.client.option.Option;
 import tech.drainwalk.client.option.options.BooleanOption;
 import tech.drainwalk.client.ui.dwmenu.UIMain;
 import tech.drainwalk.client.ui.dwmenu.components.Component;
 import tech.drainwalk.client.ui.dwmenu.elements.Element;
+import tech.drainwalk.client.ui.dwmenu.elements.impl.CheckboxElement;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.TogglerElement;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
 import tech.drainwalk.services.render.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModulesComponent extends Component {
 
@@ -26,16 +30,18 @@ public class ModulesComponent extends Component {
     private final int COLUMNS = 2;
     private final float MODULE_PADDING = 12;
 
-    private final Multimap<Module, Element<?>> optionElements = ArrayListMultimap.create();
+    private final Multimap<Module, Element<? extends Option<?>>> optionElements = ArrayListMultimap.create();
+    private final Map<Module, TogglerElement> moduleToggleElement = new HashMap<>();
 
     public ModulesComponent(float x, float y, float width, float height, UIMain parent) {
         super(x, y, width, height, parent);
         dw.getApiMain().getModuleManager().forEach(module -> {
             module.getSettingList().forEach(option -> {
                 if (option instanceof BooleanOption booleanOption) {
-                    optionElements.put(module, new TogglerElement(booleanOption));
+                    optionElements.put(module, new CheckboxElement(booleanOption));
                 } // else if...
             });
+            moduleToggleElement.put(module, new TogglerElement(new BooleanOption(module.getName(), module.isEnabled())));
         });
     }
 
@@ -92,6 +98,8 @@ public class ModulesComponent extends Component {
             SFPD_REGULAR.drawText(matrixStack, module.getName(), elementX + MODULE_PADDING, elementY + MODULE_PADDING, moduleNameColor, 16);
             SFPD_REGULAR.drawText(matrixStack, module.getDescription(), elementX + MODULE_PADDING, elementY + MODULE_PADDING * 2 + SFPD_REGULAR.getHeight(16), moduleDescColor, 14);
 
+            cursorLogic(mouseX, mouseY, elementX, elementY, elementWidth, MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14));
+
             // poloska
             RenderService.drawRect(matrixStack, elementX + 1, elementY + MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14), elementWidth - 2, 1, borderColor);
 
@@ -101,6 +109,9 @@ public class ModulesComponent extends Component {
                         elementX + MODULE_PADDING,
                         elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 1,
                         optionIconColor, 14);
+                cursorLogic(mouseX, mouseY, elementX + MODULE_PADDING,
+                        elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 1,
+                        14, 14);
                 bindPosXOffset = 0;
             }
 
@@ -116,17 +127,28 @@ public class ModulesComponent extends Component {
                     elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 2,
                     bindColor, 12);
 
+            final TogglerElement togglerElement = moduleToggleElement.get(module);
+            togglerElement.setX(elementX + elementWidth - MODULE_PADDING - togglerElement.getWidth());
+            togglerElement.setY(elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) - 1);
+            togglerElement.render(matrixStack, mouseX, mouseY, partialTicks);
+            cursorLogic(mouseX, mouseY, togglerElement.getX(), togglerElement.getY(), togglerElement.getWidth(), togglerElement.getHeight());
+
             float optionY = MODULE_PADDING * 2 + elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) +
                     SFPD_REGULAR.getHeight(14) + 2 + SFPD_REGULAR.getHeight(12);
 
             StencilService.initStencilToWrite();
             RenderService.drawRect(matrixStack, elementX, elementY, elementWidth, elementHeight, -1);
             StencilService.readStencilBuffer(3);
-            for (Element<?> element : optionElements.get(module)) {
+            for (Element<? extends Option<?>> element : optionElements.get(module)) {
                 matrixStack.push();
-                element.setX(elementX + MODULE_PADDING);
+                element.getWithModuleEnabledAnimation().animate(0, 1, 0.2f, EasingList.NONE, mc.getTimer().renderPartialTicks);
+                SFPD_REGULAR.drawText(matrixStack, element.getOption().getSettingName(), elementX + MODULE_PADDING, optionY, moduleNameColor, 14);
+                element.setX(elementX + elementWidth - MODULE_PADDING - element.getWidth());
                 element.setY(optionY);
                 element.render(matrixStack, mouseX, mouseY, partialTicks);
+
+                cursorLogic(mouseX, mouseY, element.getX(), element.getY(), element.getWidth(), element.getHeight());
+
                 optionY += (MODULE_PADDING + element.getHeight()) * element.getOpenAnimation().getAnimationValue();
                 matrixStack.pop();
             }
@@ -166,7 +188,7 @@ public class ModulesComponent extends Component {
     }
 
     private float getModuleHeight(Module module) {
-        final List<Element<?>> elements = (List<Element<?>>) optionElements.get(module);
+        final List<Element<? extends Option<?>>> elements = (List<Element<? extends Option<?>>>) optionElements.get(module);
         final float additionalHeight = (float) elements.stream()
                 .mapToDouble(element -> {
                     boolean isLastElement = elements.indexOf(element) == elements.size() - 1;
@@ -187,6 +209,10 @@ public class ModulesComponent extends Component {
             module.getAnimation().update(module.isEnabled());
             optionElements.get(module).forEach(element -> element.getOpenAnimation().update(module.isOptionsOpened()));
             optionElements.get(module).forEach(Element::tick);
+            moduleToggleElement.get(module).tick();
+            for (Element<? extends Option<?>> element : optionElements.get(module)) {
+                element.getWithModuleEnabledAnimation().update(module.isEnabled());
+            }
         }
     }
 
@@ -208,7 +234,17 @@ public class ModulesComponent extends Component {
 
             float elementHeight = getModuleHeight(module);
 
-            if (ScreenService.isHovered((int) mouseX, (int) mouseY, elementX, elementY, elementWidth, MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14))) module.toggle();
+            optionElements.get(module).forEach(element -> element.mouseClicked(mouseX, mouseY, button));
+            final TogglerElement togglerElement = moduleToggleElement.get(module);
+            togglerElement.mouseClicked(mouseX, mouseY, button);
+            if (togglerElement.getOption().getValue() != module.isEnabled()) {
+                module.toggle();
+            }
+
+            if (ScreenService.isHovered((int) mouseX, (int) mouseY, elementX, elementY, elementWidth, MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14))) {
+                module.toggle();
+                moduleToggleElement.get(module).getOption().setValue(module.isEnabled());
+            }
 
             if (ScreenService.isHovered((int) mouseX, (int) mouseY, elementX + MODULE_PADDING,
                     elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 1, 14, 14))

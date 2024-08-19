@@ -8,18 +8,16 @@ import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.ITheme;
 import tech.drainwalk.services.animation.Animation;
 
+@Getter
 @RequiredArgsConstructor
 public abstract class Element<T> implements IInstanceAccess, ITheme {
 
     @Setter
     protected float x, y;
-    @Getter
     protected final float width, height;
     protected final T option;
-    protected final Animation hoveredAnimation = new Animation();
-    @Getter
+    protected final Animation withModuleEnabledAnimation = new Animation();
     protected final Animation openAnimation = new Animation();
-    @Getter
     protected final Animation activeAnimation = new Animation();
 
     public abstract void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);

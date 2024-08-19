@@ -1,5 +1,6 @@
 package net.minecraft.client;
 
+import com.darkmagician6.eventapi.EventManager;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Queues;
 import com.google.gson.JsonElement;
@@ -240,6 +241,7 @@ import net.minecraft.world.storage.ServerWorldInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.drainwalk.Drainwalk;
+import tech.drainwalk.api.impl.events.TickEvent;
 import tech.drainwalk.client.modules.misc.NoFriendDamage;
 import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
@@ -1764,6 +1766,8 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
                 this.currentScreen.tick();
             }, "Ticking screen", this.currentScreen.getClass().getCanonicalName());
         }
+
+        EventManager.call(new TickEvent());
 
         if (!this.gameSettings.showDebugInfo)
         {
