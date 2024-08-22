@@ -1154,11 +1154,13 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
 
         if (!this.skipRenderWorld)
         {
+            EventManager.call(new TickEvent.Render(TickEvent.Phase.START, this.isGamePaused ? this.renderPartialTicksPaused : this.timer.renderPartialTicks));
             this.profiler.endStartSection("gameRenderer");
             this.gameRenderer.updateCameraAndRender(this.isGamePaused ? this.renderPartialTicksPaused : this.timer.renderPartialTicks, i, renderWorldIn);
             this.profiler.endStartSection("toasts");
             this.toastGui.func_238541_a_(new MatrixStack());
             this.profiler.endSection();
+            EventManager.call(new TickEvent.Render(TickEvent.Phase.END, this.isGamePaused ? this.renderPartialTicksPaused : this.timer.renderPartialTicks));
         }
 
         if (this.profilerResult != null)
@@ -1714,6 +1716,8 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
             --this.rightClickDelayTimer;
         }
 
+        EventManager.call(new TickEvent(TickEvent.Phase.START));
+
         this.profiler.startSection("gui");
 
         if (!this.isGamePaused)
@@ -1767,7 +1771,7 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
             }, "Ticking screen", this.currentScreen.getClass().getCanonicalName());
         }
 
-        EventManager.call(new TickEvent());
+        EventManager.call(new TickEvent(TickEvent.Phase.MID));
 
         if (!this.gameSettings.showDebugInfo)
         {
@@ -1889,6 +1893,7 @@ public class Minecraft extends RecursiveEventLoop<Runnable> implements ISnooperI
         this.profiler.endStartSection("keyboard");
         this.keyboardListener.tick();
         this.profiler.endSection();
+        EventManager.call(new TickEvent(TickEvent.Phase.END));
     }
 
     private boolean func_244600_aM()

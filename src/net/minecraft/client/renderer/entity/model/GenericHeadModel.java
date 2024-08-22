@@ -2,13 +2,17 @@ package net.minecraft.client.renderer.entity.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
+@Getter
+@Setter
 public class GenericHeadModel extends Model
 {
-    protected final ModelRenderer field_217105_a;
+    protected ModelRenderer field_217105_a;
 
     public GenericHeadModel()
     {

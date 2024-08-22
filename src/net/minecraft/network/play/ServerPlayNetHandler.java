@@ -5,6 +5,12 @@ import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
+import com.tom.cpl.util.NettyByteBufInputStream;
+import com.tom.cpm.client.Platform;
+import com.tom.cpm.common.ServerHandler;
+import com.tom.cpm.shared.MinecraftObjectHolder;
+import com.tom.cpm.shared.config.PlayerData;
+import com.tom.cpm.shared.network.NetH;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import it.unimi.dsi.fastutil.ints.Int2ShortMap;
@@ -151,7 +157,7 @@ import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ServerPlayNetHandler implements IServerPlayNetHandler
+public class ServerPlayNetHandler implements IServerPlayNetHandler, NetH.ServerNetH
 {
     private static final Logger LOGGER = LogManager.getLogger();
     public final NetworkManager netManager;
@@ -1880,6 +1886,9 @@ public class ServerPlayNetHandler implements IServerPlayNetHandler
      */
     public void processCustomPayload(CCustomPayloadPacket packetIn)
     {
+        if(Platform.getName(packetIn).getNamespace().equals(MinecraftObjectHolder.NETWORK_ID)) {
+            ServerHandler.netHandler.receiveServer(Platform.getName(packetIn), new NettyByteBufInputStream(Platform.getData(packetIn)), this);
+        }
     }
 
     public void func_217263_a(CSetDifficultyPacket p_217263_1_)
@@ -1900,5 +1909,28 @@ public class ServerPlayNetHandler implements IServerPlayNetHandler
         {
             this.server.setDifficultyLocked(p_217261_1_.func_218776_b());
         }
+    }
+
+    private boolean cpm$hasMod;
+    private PlayerData cpm$data;
+
+    @Override
+    public boolean cpm$hasMod() {
+        return cpm$hasMod;
+    }
+
+    @Override
+    public void cpm$setHasMod(boolean v) {
+        this.cpm$hasMod = v;
+    }
+
+    @Override
+    public PlayerData cpm$getEncodedModelData() {
+        return cpm$data;
+    }
+
+    @Override
+    public void cpm$setEncodedModelData(PlayerData data) {
+        cpm$data = data;
     }
 }

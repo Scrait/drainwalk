@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+import com.tom.cpm.mixin.ClientPlayerEntityController;
 import lombok.Getter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -872,6 +873,7 @@ public class ClientPlayerEntity extends AbstractClientPlayerEntity implements Ca
             this.movementInput.jump = true;
         }
 
+        ClientPlayerEntityController.onAiStep();
         if (!this.noClip)
         {
             this.setPlayerOffsetMotion(this.getPosX() - (double)this.getWidth() * 0.35D, this.getPosZ() + (double)this.getWidth() * 0.35D);

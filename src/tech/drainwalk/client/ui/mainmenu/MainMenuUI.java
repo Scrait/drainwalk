@@ -2,6 +2,8 @@ package tech.drainwalk.client.ui.mainmenu;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.tom.cpm.client.GuiImpl;
+import com.tom.cpm.shared.editor.gui.EditorGui;
 import lombok.NonNull;
 import net.minecraft.client.gui.screen.MultiplayerScreen;
 import net.minecraft.client.gui.screen.OptionsScreen;
@@ -45,7 +47,7 @@ public class MainMenuUI extends Screen implements IInstanceAccess {
                 (button) -> this.minecraft.displayGuiScreen(new OptionsScreen(this, mc.gameSettings)), false));
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2 / 2), (int) (height / 2f - buttonHeight / 2 + ((buttonsGap + buttonHeight) * 3 + buttonsGap * 2)), (int) buttonWidth / 2, (int) buttonHeight,
                 new TranslationTextComponent("menu.quit"),
-                (button) -> mc.shutdown(), true));
+                (button) ->  mc.displayGuiScreen(new GuiImpl(EditorGui::new, mc.currentScreen)), true));
     }
 
     @Override

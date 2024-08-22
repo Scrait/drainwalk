@@ -5,6 +5,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import java.util.List;
 import javax.annotation.Nullable;
+
+import com.tom.cpm.client.LivingRendererAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -29,7 +31,7 @@ import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class LivingRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements IEntityRenderer<T, M>
+public abstract class LivingRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements IEntityRenderer<T, M>, LivingRendererAccess
 {
     private static final Logger LOGGER = LogManager.getLogger();
     public M entityModel;
@@ -197,6 +199,9 @@ public abstract class LivingRenderer<T extends LivingEntity, M extends EntityMod
 
         if (p_230496_3_)
         {
+            if(!p_230496_2_) {
+                return cpm$onGetRenderType(p_230496_1_, p_230496_3_, p_230496_4_, RenderType.getItemEntityTranslucentCull(resourcelocation));
+            }
             return RenderType.getItemEntityTranslucentCull(resourcelocation);
         }
         else if (p_230496_2_)
@@ -205,11 +210,11 @@ public abstract class LivingRenderer<T extends LivingEntity, M extends EntityMod
         }
         else if (p_230496_1_.isGlowing() && !Config.getMinecraft().worldRenderer.isRenderEntityOutlines())
         {
-            return this.entityModel.getRenderType(resourcelocation);
+            return cpm$onGetRenderType(p_230496_1_, p_230496_3_, p_230496_4_, this.entityModel.getRenderType(resourcelocation));
         }
         else
         {
-            return p_230496_4_ ? RenderType.getOutline(resourcelocation) : null;
+            return cpm$onGetRenderType(p_230496_1_, p_230496_3_, p_230496_4_, p_230496_4_ ? RenderType.getOutline(resourcelocation) : null);
         }
     }
 
@@ -381,5 +386,10 @@ public abstract class LivingRenderer<T extends LivingEntity, M extends EntityMod
     public List<LayerRenderer<T, M>> getLayerRenderers()
     {
         return this.layerRenderers;
+    }
+
+    @Override
+    public RenderType cpm$onGetRenderType(LivingEntity player, boolean pTranslucent, boolean pGlowing, RenderType cbi) {
+        return cbi;
     }
 }

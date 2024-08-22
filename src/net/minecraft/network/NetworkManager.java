@@ -32,6 +32,8 @@ import java.net.SocketAddress;
 import java.util.Queue;
 import javax.annotation.Nullable;
 import javax.crypto.Cipher;
+
+import lombok.Getter;
 import net.minecraft.network.login.ServerLoginNetHandler;
 import net.minecraft.network.play.ServerPlayNetHandler;
 import net.minecraft.network.play.server.SDisconnectPacket;
@@ -69,6 +71,7 @@ public class NetworkManager extends SimpleChannelInboundHandler < IPacket<? >>
     private final Queue<NetworkManager.QueuedPacket> outboundPacketsQueue = Queues.newConcurrentLinkedQueue();
 
     /** The active channel */
+    @Getter
     private Channel channel;
 
     /** The address of the remote party */

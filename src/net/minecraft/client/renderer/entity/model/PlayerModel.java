@@ -16,12 +16,12 @@ import net.minecraft.util.HandSide;
 public class PlayerModel<T extends LivingEntity> extends BipedModel<T>
 {
     private List<ModelRenderer> modelRenderers = Lists.newArrayList();
-    public final ModelRenderer bipedLeftArmwear;
-    public final ModelRenderer bipedRightArmwear;
-    public final ModelRenderer bipedLeftLegwear;
-    public final ModelRenderer bipedRightLegwear;
-    public final ModelRenderer bipedBodyWear;
-    private final ModelRenderer bipedCape;
+    public ModelRenderer bipedLeftArmwear;
+    public ModelRenderer bipedRightArmwear;
+    public ModelRenderer bipedLeftLegwear;
+    public ModelRenderer bipedRightLegwear;
+    public ModelRenderer bipedBodyWear;
+    public ModelRenderer bipedCape;
     private final ModelRenderer bipedDeadmau5Head;
     private final boolean smallArms;
 

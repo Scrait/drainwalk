@@ -4,13 +4,15 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.io.IOException;
 import java.util.concurrent.Executor;
+
+import com.tom.cpm.client.optifine.proxy.TextureOF;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.optifine.Config;
 import net.optifine.shaders.MultiTexID;
 import net.optifine.shaders.ShadersTex;
 
-public abstract class Texture implements AutoCloseable
+public abstract class Texture implements AutoCloseable, TextureOF
 {
     protected int glTextureId = -1;
     protected boolean blur;
@@ -129,4 +131,18 @@ public abstract class Texture implements AutoCloseable
     {
         this.setBlurMipmapDirect(this.lastBlur, this.lastMipmap);
     }
+
+    @Override
+    public MultiTexID cpm$multiTex() {
+        return multiTex;
+    }
+
+    @Override
+    public void cpm$copyMultiTex(MultiTexID mt) {
+        if(multiTex != null && mt != null) {
+            multiTex.norm = mt.norm;
+            multiTex.spec = mt.spec;
+        }
+    }
+
 }

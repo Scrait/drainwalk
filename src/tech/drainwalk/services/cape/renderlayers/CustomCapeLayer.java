@@ -3,6 +3,7 @@ package tech.drainwalk.services.cape.renderlayers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.tom.cpm.mixin.CapeLayerController;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -56,6 +57,7 @@ public class CustomCapeLayer extends LayerRenderer<AbstractClientPlayerEntity, P
 
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn.isInvisible()) return;
+        if (CapeLayerController.onRender(getEntityModel(), matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, partialTicks)) return;
         final CastUtil castHelper = new CastUtil();
         castHelper.apply(CastUtil.EntityType.FRIENDS);
         castHelper.apply(CastUtil.EntityType.SELF);

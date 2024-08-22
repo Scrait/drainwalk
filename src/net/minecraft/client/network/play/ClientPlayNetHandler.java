@@ -7,6 +7,11 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.tom.cpl.util.NettyByteBufInputStream;
+import com.tom.cpm.client.CustomPlayerModelsClient;
+import com.tom.cpm.client.Platform;
+import com.tom.cpm.shared.MinecraftObjectHolder;
+import com.tom.cpm.shared.network.NetH;
 import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -308,7 +313,7 @@ import org.apache.logging.log4j.Logger;
 import tech.drainwalk.api.impl.events.player.EventTeleport;
 import tech.drainwalk.client.ui.mainmenu.MainMenuUI;
 
-public class ClientPlayNetHandler implements IClientPlayNetHandler
+public class ClientPlayNetHandler implements IClientPlayNetHandler, NetH
 {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ITextComponent field_243491_b = new TranslationTextComponent("disconnect.lost");
@@ -2278,6 +2283,10 @@ public class ClientPlayNetHandler implements IClientPlayNetHandler
      */
     public void handleCustomPayload(SCustomPayloadPlayPacket packetIn)
     {
+        if(Platform.getName(packetIn).getNamespace().equals(MinecraftObjectHolder.NETWORK_ID)) {
+            CustomPlayerModelsClient.INSTANCE.netHandler.receiveClient(Platform.getName(packetIn), new NettyByteBufInputStream(Platform.getData(packetIn)), this);
+            return;
+        }
         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.client);
         ResourceLocation resourcelocation = packetIn.getChannelName();
         PacketBuffer packetbuffer = null;
@@ -2955,5 +2964,17 @@ public class ClientPlayNetHandler implements IClientPlayNetHandler
     public DynamicRegistries func_239165_n_()
     {
         return this.field_239163_t_;
+    }
+
+    private boolean cpm$hasMod;
+
+    @Override
+    public boolean cpm$hasMod() {
+        return cpm$hasMod;
+    }
+
+    @Override
+    public void cpm$setHasMod(boolean v) {
+        this.cpm$hasMod = v;
     }
 }

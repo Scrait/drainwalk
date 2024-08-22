@@ -2573,6 +2573,10 @@ public abstract class Entity implements INameable, ICommandSource
         return this.isActualySwimming() && !this.isInWater();
     }
 
+    public boolean isVisuallyCrawling() {
+        return this.isVisuallySwimming() && !this.isInWater();
+    }
+
     public void setSwimming(boolean swimming)
     {
         this.setFlag(4, swimming);

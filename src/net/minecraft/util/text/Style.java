@@ -190,6 +190,11 @@ public class Style
         return new Style(this.color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, fontId);
     }
 
+    public Style setStrikethrough(@Nullable Boolean strikethrough)
+    {
+        return new Style(this.color, this.bold, this.italic, this.underlined, strikethrough, this.obfuscated, this.clickEvent, this.hoverEvent, this.insertion, this.fontId);
+    }
+
     public Style applyFormatting(TextFormatting formatting)
     {
         Color color = this.color;

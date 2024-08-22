@@ -1,15 +1,19 @@
 package net.minecraft.client.renderer.entity.model;
 
 import com.google.common.collect.ImmutableList;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
 
+@Getter
+@Setter
 public class ElytraModel<T extends LivingEntity> extends AgeableModel<T>
 {
-    private final ModelRenderer rightWing;
-    private final ModelRenderer leftWing = new ModelRenderer(this, 22, 0);
+    private ModelRenderer rightWing;
+    private ModelRenderer leftWing = new ModelRenderer(this, 22, 0);
 
     public ElytraModel()
     {

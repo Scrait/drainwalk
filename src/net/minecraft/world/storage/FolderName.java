@@ -13,7 +13,7 @@ public class FolderName
     public static final FolderName DOT = new FolderName(".");
     private final String fileName;
 
-    private FolderName(String fileName)
+    public FolderName(String fileName)
     {
         this.fileName = fileName;
     }

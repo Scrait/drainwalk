@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
 import net.minecraft.client.renderer.texture.Texture;
@@ -30,6 +32,7 @@ import net.minecraft.util.Util;
 public class SkinManager
 {
     private final TextureManager textureManager;
+    @Getter
     private final File skinCacheDir;
     private final MinecraftSessionService sessionService;
     private final LoadingCache<String, Map<Type, MinecraftProfileTexture>> skinCacheLoader;

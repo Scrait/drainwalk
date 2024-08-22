@@ -1,6 +1,11 @@
 package net.minecraft.client.renderer.entity;
 
+import com.darkmagician6.eventapi.EventManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.tom.cpm.client.ClientBase;
+import com.tom.cpm.client.CustomPlayerModelsClient;
+import com.tom.cpm.client.LivingRendererAccess;
+import com.tom.cpm.mixin.PlayerRendererController;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +23,7 @@ import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
@@ -34,9 +40,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import tech.drainwalk.api.impl.events.player.RenderPlayerEvent;
 import tech.drainwalk.services.cape.renderlayers.CustomCapeLayer;
 
-public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>>
+public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> implements ClientBase.PlayerNameTagRenderer<AbstractClientPlayerEntity>, LivingRendererAccess
 {
     public PlayerRenderer(EntityRendererManager renderManager)
     {
@@ -61,7 +68,9 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
     public void render(AbstractClientPlayerEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
     {
         this.setModelVisibilities(entityIn);
+        EventManager.call(new RenderPlayerEvent.Pre(this, bufferIn, entityIn));
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        EventManager.call(new RenderPlayerEvent.Post(this, bufferIn, entityIn));
     }
 
     public Vector3d getRenderOffset(AbstractClientPlayerEntity entityIn, float partialTicks)
@@ -158,7 +167,9 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
      */
     public ResourceLocation getEntityTexture(AbstractClientPlayerEntity entity)
     {
-        return entity.getLocationSkin();
+//        final ResourceLocation location = entity.getLocationSkin();
+        return PlayerRendererController.onGetEntityTexture(getEntityModel(), entity.getLocationSkin());
+        /*return location;*/
     }
 
     protected void preRenderCallback(AbstractClientPlayerEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime)
@@ -169,6 +180,8 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
 
     protected void renderName(AbstractClientPlayerEntity entityIn, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
     {
+        if (!PlayerRendererController.onRenderName1()) return;
+
         double d0 = this.renderManager.squareDistanceTo(entityIn);
         matrixStackIn.push();
 
@@ -185,18 +198,24 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
             }
         }
 
+        PlayerRendererController.onRenderName2(this, entityIn, matrixStackIn, bufferIn, packedLightIn);
+
         super.renderName(entityIn, displayNameIn, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pop();
     }
 
     public void renderRightArm(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn)
     {
+        PlayerRendererController.onRenderRightArmPre(getEntityModel(), bufferIn);
         this.renderItem(matrixStackIn, bufferIn, combinedLightIn, playerIn, (this.entityModel).bipedRightArm, (this.entityModel).bipedRightArmwear);
+        PlayerRendererController.onRenderRightArmPost(getEntityModel(), bufferIn);
     }
 
     public void renderLeftArm(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn)
     {
+        PlayerRendererController.onRenderLeftArmPre(getEntityModel(), bufferIn);
         this.renderItem(matrixStackIn, bufferIn, combinedLightIn, playerIn, (this.entityModel).bipedLeftArm, (this.entityModel).bipedLeftArmwear);
+        PlayerRendererController.onRenderLeftArmPost(getEntityModel(), bufferIn);
     }
 
     private void renderItem(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, AbstractClientPlayerEntity playerIn, ModelRenderer rendererArmIn, ModelRenderer rendererArmwearIn)
@@ -208,9 +227,9 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
         playermodel.swimAnimation = 0.0F;
         playermodel.setRotationAngles(playerIn, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
         rendererArmIn.rotateAngleX = 0.0F;
-        rendererArmIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntitySolid(playerIn.getLocationSkin())), combinedLightIn, OverlayTexture.NO_OVERLAY);
+        rendererArmIn.render(matrixStackIn, bufferIn.getBuffer(PlayerRendererController.getArmLayer(/*playerIn.getLocationSkin()*/ getEntityModel(), getEntityTexture(playerIn))), combinedLightIn, OverlayTexture.NO_OVERLAY);
         rendererArmwearIn.rotateAngleX = 0.0F;
-        rendererArmwearIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(playerIn.getLocationSkin())), combinedLightIn, OverlayTexture.NO_OVERLAY);
+        rendererArmwearIn.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(/*playerIn.getLocationSkin()*/ getEntityTexture(playerIn))), combinedLightIn, OverlayTexture.NO_OVERLAY);
     }
 
     protected void applyRotations(AbstractClientPlayerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks)
@@ -257,4 +276,33 @@ public class PlayerRenderer extends LivingRenderer<AbstractClientPlayerEntity, P
             super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
         }
     }
+
+    @Override
+    public void cpm$renderNameTag(AbstractClientPlayerEntity entityIn, ITextComponent displayNameIn,
+                                  MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        super.renderName(entityIn, displayNameIn, matrixStackIn, bufferIn, packedLightIn);
+    }
+
+    @Override
+    public EntityRendererManager cpm$entityRenderDispatcher() {
+        return renderManager;
+    }
+
+    @Override
+    public RenderType cpm$onGetRenderType(LivingEntity player, boolean pTranslucent, boolean pGlowing, RenderType cbi) {
+        if(CustomPlayerModelsClient.mc.getPlayerRenderManager().isBound(getEntityModel())) {
+            boolean r = CustomPlayerModelsClient.mc.getPlayerRenderManager().getHolderSafe(getEntityModel(), null, h -> h.setInvisState(), false, false);
+            if(pTranslucent)return cbi;
+            if(!pGlowing && !r)return cbi;
+            ResourceLocation tex = getEntityTexture((AbstractClientPlayerEntity) player);
+            CustomPlayerModelsClient.mc.getPlayerRenderManager().getHolderSafe(getEntityModel(), null, h -> h.setInvis(pGlowing), false);
+            cbi =
+                    pGlowing ?
+                            RenderType.getOutline(tex) :
+                            RenderType.getEntityCutout(new ResourceLocation("cpm:textures/template/empty.png"));
+            return cbi;
+        }
+        return cbi;
+    }
+
 }

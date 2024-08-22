@@ -2,6 +2,7 @@ package net.minecraft.client.renderer.entity.layers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.tom.cpm.mixin.ParrotVariantLayerController;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -33,6 +34,7 @@ public class ParrotVariantLayer<T extends PlayerEntity> extends LayerRenderer<T,
 
     private void renderParrot(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float netHeadYaw, float headPitch, boolean leftShoulderIn)
     {
+        ParrotVariantLayerController.onRenderPre(matrixStackIn, entitylivingbaseIn, leftShoulderIn);
         CompoundNBT compoundnbt = leftShoulderIn ? entitylivingbaseIn.getLeftShoulderEntity() : entitylivingbaseIn.getRightShoulderEntity();
         EntityType.byKey(compoundnbt.getString("id")).filter((p_lambda$renderParrot$0_0_) ->
         {
@@ -69,5 +71,6 @@ public class ParrotVariantLayer<T extends PlayerEntity> extends LayerRenderer<T,
                 Shaders.nextEntity(entity);
             }
         });
+        ParrotVariantLayerController.onRenderPost(matrixStackIn);
     }
 }

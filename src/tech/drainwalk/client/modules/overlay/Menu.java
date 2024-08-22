@@ -1,5 +1,7 @@
 package tech.drainwalk.client.modules.overlay;
 
+import com.tom.cpm.client.GuiImpl;
+import com.tom.cpm.shared.editor.gui.EditorGui;
 import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.models.module.Module;
 import tech.drainwalk.api.impl.models.module.category.Category;
@@ -15,6 +17,7 @@ public class Menu extends Module {
     public void toggle() {
         if (!this.isEnabled() && mc.currentScreen != dw.getUiMain()) {
             mc.displayGuiScreen(dw.getUiMain());
+            mc.displayGuiScreen(new GuiImpl(EditorGui::new, dw.getUiMain()));
         }
     }
 

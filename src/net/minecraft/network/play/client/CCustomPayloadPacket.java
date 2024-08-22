@@ -2,11 +2,14 @@ package net.minecraft.network.play.client;
 
 import io.netty.buffer.ByteBuf;
 import java.io.IOException;
+
+import lombok.Getter;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.IServerPlayNetHandler;
 import net.minecraft.util.ResourceLocation;
 
+@Getter
 public class CCustomPayloadPacket implements IPacket<IServerPlayNetHandler>
 {
     public static final ResourceLocation BRAND = new ResourceLocation("brand");

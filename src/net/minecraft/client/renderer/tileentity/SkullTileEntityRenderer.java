@@ -8,6 +8,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import java.util.Map;
 import javax.annotation.Nullable;
+
+import com.tom.cpm.mixin.SkullTileEntityRendererController;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SkullBlock;
@@ -68,6 +70,7 @@ public class SkullTileEntityRenderer extends TileEntityRenderer<SkullTileEntity>
     public static void render(@Nullable Direction directionIn, float p_228879_1_, SkullBlock.ISkullType skullType, @Nullable GameProfile gameProfileIn, float animationProgress, MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int combinedLight)
     {
         GenericHeadModel genericheadmodel = MODELS.get(skullType);
+        SkullTileEntityRendererController.onRenderPre(genericheadmodel, skullType, gameProfileIn, buffer);
         matrixStackIn.push();
 
         if (directionIn == null)
@@ -85,6 +88,7 @@ public class SkullTileEntityRenderer extends TileEntityRenderer<SkullTileEntity>
         genericheadmodel.func_225603_a_(animationProgress, p_228879_1_, 0.0F);
         genericheadmodel.render(matrixStackIn, ivertexbuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
+        SkullTileEntityRendererController.onRenderPost(genericheadmodel, skullType, gameProfileIn, buffer);
     }
 
     private static RenderType getRenderType(SkullBlock.ISkullType skullType, @Nullable GameProfile gameProfileIn)
@@ -95,7 +99,7 @@ public class SkullTileEntityRenderer extends TileEntityRenderer<SkullTileEntity>
         {
             Minecraft minecraft = Minecraft.getInstance();
             Map<Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(gameProfileIn);
-            return map.containsKey(Type.SKIN) ? RenderType.getEntityTranslucent(minecraft.getSkinManager().loadSkin(map.get(Type.SKIN), Type.SKIN)) : RenderType.getEntityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(PlayerEntity.getUUID(gameProfileIn)));
+            return map.containsKey(Type.SKIN) ? SkullTileEntityRendererController.onGetRenderType(MODELS.get(skullType), minecraft.getSkinManager().loadSkin(map.get(Type.SKIN), Type.SKIN)) : SkullTileEntityRendererController.onGetRenderTypeNoSkin(MODELS.get(skullType), DefaultPlayerSkin.getDefaultSkin(PlayerEntity.getUUID(gameProfileIn)));
         }
         else
         {

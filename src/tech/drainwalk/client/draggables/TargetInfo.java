@@ -34,7 +34,7 @@ public class TargetInfo extends DraggableComponent {
 
 
     public TargetInfo() {
-        super("TargetInfo", new Vector2f(10, 10 * 3 + 26 + 66), 128, 53);
+        super("TargetInfo", new Vector2f(10, 10 * 3 + 26 + 66), 128, 56);
     }
 
     @Override
@@ -86,12 +86,12 @@ public class TargetInfo extends DraggableComponent {
             final float maxBarWidth = 116;
             final double healthWid = MathService.clamp(target.getHealth() / target.getMaxHealth() * maxBarWidth, 0.0D, maxBarWidth);
             healthBarWidth = AnimationService.animation((float) healthBarWidth, (float) healthWid, (float) (10 * Timer.deltaTime()));
-            RenderService.drawRoundedHorLinearGradientRect(matrixStack, x + padding.getValue(), y + padding.getValue() * 2 + 28, maxBarWidth, 7, 4,
+            RenderService.drawRoundedHorLinearGradientRect(matrixStack, x + padding.getValue(), y + padding.getValue() * 2 + 28, maxBarWidth, 10, 2,
                     ColorService.getColorWithAlpha(additionalFirstColor, 0.5f),
                     ColorService.getColorWithAlpha(additionalSecondColor, 0.5f)
             );
-            RenderService.drawRoundedHorLinearGradientRect(matrixStack, x + padding.getValue(), y + padding.getValue() * 2 + 28, (float) healthBarWidth, 7, 4, additionalFirstColor, additionalSecondColor);
-            SFPD_REGULAR.drawCenteredText(matrixStack, String.valueOf((int) target.getHealth()), x + padding.getValue() + maxBarWidth / 2, y + padding.getValue() * 2 + 28.5f, textFirstColor, 6);
+            RenderService.drawRoundedHorLinearGradientRect(matrixStack, x + padding.getValue(), y + padding.getValue() * 2 + 28, (float) healthBarWidth, 10, 2, additionalFirstColor, additionalSecondColor);
+            SFPD_REGULAR.drawCenteredText(matrixStack, String.valueOf((int) target.getHealth()), x + padding.getValue() + maxBarWidth / 2, y + padding.getValue() * 2 + 28.5f, textFirstColor, 9);
             healthBarWidth = AnimationService.getAnimationState((float) healthBarWidth, (float) healthWid, (float) (10 * Timer.deltaTime()));
         }
 

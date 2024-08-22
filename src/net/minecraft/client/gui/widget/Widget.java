@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.AbstractGui;
@@ -29,6 +30,7 @@ public abstract class Widget extends AbstractGui implements IRenderable, IGuiEve
 {
     public static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("textures/gui/widgets.png");
     protected int width;
+    @Setter
     protected int height;
     public int x;
     public int y;

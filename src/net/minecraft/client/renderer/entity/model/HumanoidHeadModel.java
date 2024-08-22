@@ -2,11 +2,15 @@ package net.minecraft.client.renderer.entity.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
+@Getter
+@Setter
 public class HumanoidHeadModel extends GenericHeadModel
 {
-    private final ModelRenderer head = new ModelRenderer(this, 32, 0);
+    private ModelRenderer head = new ModelRenderer(this, 32, 0);
 
     public HumanoidHeadModel()
     {

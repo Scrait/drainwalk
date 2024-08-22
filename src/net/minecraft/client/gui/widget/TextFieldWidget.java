@@ -8,6 +8,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
+
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -54,6 +56,7 @@ public class TextFieldWidget extends Widget implements IRenderable, IGuiEventLis
     private int cursorPosition;
 
     /** other selection position, maybe the same as the cursor */
+    @Getter
     private int selectionEnd;
     private int enabledColor = 14737632;
     private int disabledColor = 7368816;

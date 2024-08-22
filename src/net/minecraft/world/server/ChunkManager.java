@@ -37,6 +37,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
+import lombok.Getter;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -129,6 +131,7 @@ public class ChunkManager extends ChunkLoader implements ChunkHolder.IPlayerProv
     private final TemplateManager templateManager;
     private final File dimensionDirectory;
     private final PlayerGenerationTracker playerGenerationTracker = new PlayerGenerationTracker();
+    @Getter
     private final Int2ObjectMap<ChunkManager.EntityTracker> entities = new Int2ObjectOpenHashMap<>();
     private final Long2ByteMap field_241087_z_ = new Long2ByteOpenHashMap();
     private final Queue<Runnable> saveTasks = Queues.newConcurrentLinkedQueue();
@@ -1391,12 +1394,14 @@ public class ChunkManager extends ChunkLoader implements ChunkHolder.IPlayerProv
         });
     }
 
-    class EntityTracker
+    public class EntityTracker
     {
         private final TrackedEntity entry;
+        @Getter
         private final Entity entity;
         private final int range;
         private SectionPos pos;
+        @Getter
         private final Set<ServerPlayerEntity> trackingPlayers = Sets.newHashSet();
 
         public EntityTracker(Entity entity, int p_i50468_3_, int updateFrequency, boolean sendVelocityUpdates)

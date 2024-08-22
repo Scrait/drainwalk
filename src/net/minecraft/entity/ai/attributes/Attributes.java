@@ -17,6 +17,7 @@ public class Attributes
     public static final Attribute LUCK = register("generic.luck", (new RangedAttribute("attribute.name.generic.luck", 0.0D, -1024.0D, 1024.0D)).setShouldWatch(true));
     public static final Attribute ZOMBIE_SPAWN_REINFORCEMENTS = register("zombie.spawn_reinforcements", new RangedAttribute("attribute.name.zombie.spawn_reinforcements", 0.0D, 0.0D, 1.0D));
     public static final Attribute HORSE_JUMP_STRENGTH = register("horse.jump_strength", (new RangedAttribute("attribute.name.horse.jump_strength", 0.7D, 0.0D, 2.0D)).setShouldWatch(true));
+    public static final Attribute REACH_DISTANCE = register("horse.jump_strength", (new RangedAttribute("reach_distance", 5.0, 0.0, 1024.0)).setShouldWatch(true));
 
     private static Attribute register(String id, Attribute attribute)
     {

@@ -1,6 +1,7 @@
 package tech.drainwalk;
 
 import com.darkmagician6.eventapi.EventManager;
+import com.tom.cpm.CustomPlayerModels;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tech.drainwalk.api.ApiMain;
@@ -67,6 +68,7 @@ public class Drainwalk implements IInstanceAccess {
 
         // mods
         EventManager.register(new Highlighter());
+        new CustomPlayerModels();
     }
 
 }

@@ -18,7 +18,9 @@ public class DrainwalkResource extends ResourceLocation implements IInstanceAcce
     public static void registerResources() {
         SimpleReloadableResourceManager resourceManager = (SimpleReloadableResourceManager) mc.getResourceManager();
         IResourcePack customResourcePack = new DrainwalkPack(NAMESPACE);
+        IResourcePack customResourcePack2 = new DrainwalkPack("cpm");
         resourceManager.addResourcePack(customResourcePack);
+        resourceManager.addResourcePack(customResourcePack2);
     }
 
 }

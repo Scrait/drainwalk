@@ -9,6 +9,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.datafixers.DataFixer;
+import com.tom.cpm.MinecraftServerObject;
+import com.tom.cpm.shared.MinecraftObjectHolder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
@@ -718,6 +720,7 @@ public abstract class MinecraftServer extends RecursiveEventLoop<TickDelayedTask
         {
             if (this.init())
             {
+                MinecraftObjectHolder.setServerObject(new MinecraftServerObject(this));
                 this.serverTime = Util.milliTime();
                 this.statusResponse.setServerDescription(new StringTextComponent(this.motd));
                 this.statusResponse.setVersion(new ServerStatusResponse.Version(SharedConstants.getVersion().getName(), SharedConstants.getVersion().getProtocolVersion()));
@@ -750,6 +753,9 @@ public abstract class MinecraftServer extends RecursiveEventLoop<TickDelayedTask
                     this.func_240795_b_(longtickdetector);
                     this.serverIsRunning = true;
                 }
+
+                MinecraftObjectHolder.setServerObject(null);
+
             }
             else
             {
