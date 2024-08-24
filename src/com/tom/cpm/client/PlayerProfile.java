@@ -187,6 +187,7 @@ public class PlayerProfile extends Player<PlayerEntity> {
 			@Override
 			protected CompletableFuture<Void> load0() {
 				Map<Type, MinecraftProfileTexture> map = Minecraft.getInstance().getSkinManager().loadSkinFromCache(profile);
+				System.out.println(map);
 				defineAll(map, MinecraftProfileTexture::getUrl, MinecraftProfileTexture::getHash);
 				if (map.containsKey(Type.SKIN)) {
 					MinecraftProfileTexture tex = map.get(Type.SKIN);
@@ -195,29 +196,30 @@ public class PlayerProfile extends Player<PlayerEntity> {
 					if (skinType == null) {
 						skinType = "default";
 					}
+					System.out.println("CompletableFuture.completedFuture(null)");
 					return CompletableFuture.completedFuture(null);
 				}
 				CompletableFuture<Void> cf = new CompletableFuture<>();
-				Minecraft.getInstance().getSkinManager().loadProfileTextures(profile, new ISkinAvailableCallback() {
+				Minecraft.getInstance().getSkinManager().loadProfileTextures(profile, (typeIn, location, profileTexture) -> {
+					System.out.println("defineTexture " + typeIn);
+                    defineTexture(typeIn, profileTexture.getUrl(), profileTexture.getHash());
+                    System.out.println("defineTexture");
+                    switch (typeIn) {
+                    case SKIN:
+                        skinType = profileTexture.getMetadata("model");
 
-					@Override
-					public void onSkinTextureAvailable(Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
-						defineTexture(typeIn, profileTexture.getUrl(), profileTexture.getHash());
-						switch (typeIn) {
-						case SKIN:
-							skinType = profileTexture.getMetadata("model");
+                        if (skinType == null) {
+                            skinType = "default";
+                        }
+                        RenderSystem.recordRenderCall(() -> cf.complete(null));
+                        break;
 
-							if (skinType == null) {
-								skinType = "default";
-							}
-							RenderSystem.recordRenderCall(() -> cf.complete(null));
-							break;
-
-						default:
-							break;
-						}
-					}
-				}, true);
+                    default:
+                        System.out.println("дефолт");
+                        break;
+                    }
+                }, true);
+				System.out.println("return cf");
 				return cf;
 			}
 		};

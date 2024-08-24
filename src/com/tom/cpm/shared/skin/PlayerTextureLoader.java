@@ -110,9 +110,12 @@ public abstract class PlayerTextureLoader {
 	}
 
 	protected <Ty extends Enum<Ty>, Tx> void defineAll(Map<Ty, Tx> map, Function<Tx, String> toURL, Function<Tx, String> toHash) {
+		System.out.println("ya tut");
 		for(Entry<Ty, Tx> e : map.entrySet()) {
 			defineTexture(TextureType.valueOf(e.getKey().name()), toURL.apply(e.getValue()), toHash.apply(e.getValue()));
 		}
+		System.out.println("ya vishel");
+
 	}
 
 	public CompletableFuture<Image> getTexture(TextureType type) {

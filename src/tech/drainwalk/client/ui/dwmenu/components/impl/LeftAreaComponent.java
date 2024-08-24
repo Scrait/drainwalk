@@ -74,6 +74,11 @@ public class LeftAreaComponent extends Component {
     }
 
     @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+
+    }
+
+    @Override
     public void charTyped(char codePoint, int modifiers) {}
 
     @Override

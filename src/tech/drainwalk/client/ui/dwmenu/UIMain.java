@@ -12,7 +12,6 @@ import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.StringTextComponent;
-import tech.drainwalk.api.impl.events.TickEvent;
 import tech.drainwalk.api.impl.events.UpdateEvent;
 import tech.drainwalk.api.impl.events.render.EventRender3D;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
@@ -47,32 +46,39 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     private final float UI_HEIGHT = 472;
     @Getter
     private final Animation animation = new Animation();
-    private boolean direction;
     private Vector3d onClosePlayerPos;
     private Vector2f rotation;
+    private float lastX;
+    private float lastY;
 
     @Getter
     private final float ROUND = 8;
 
     public UIMain() {
         super(new StringTextComponent("DrainUI"));
-        direction = true;
     }
 
     @Override
     public void init() {
+        EventManager.unregister(this);
+
         final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
         final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
         final float x = width / 2 - UI_WIDTH / 2;
         final float y = height / 2 - UI_HEIGHT / 2;
-
-        components.clear();
-        EventManager.unregister(this);
-
-        register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
-        register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
-        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
-        register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
+        if (components.isEmpty()) {
+            lastX = x;
+            lastY = y;
+            register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
+            register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
+            register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
+            register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
+            return;
+        }
+        components.forEach(component -> component.setX(component.getX() - lastX + x));
+        components.forEach(component -> component.setY(component.getY() - lastY + y));
+        lastX = x;
+        lastY = y;
     }
 
     @Override
@@ -98,7 +104,6 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     @Override
     public void tick() {
         if (components.stream().filter(Component::isSomeElementHovered).toList().isEmpty()) ScreenService.setArrowCursor();
-        direction = true;
         animation.update(true);
         components.forEach(Component::tick);
     }
@@ -124,31 +129,34 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     }
 
     @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        final Vector2f fixedMouseCords = GLService.INSTANCE.normalizeCords(mouseX, mouseY, 1);
+        components.forEach(component -> component.mouseReleased(fixedMouseCords.x, fixedMouseCords.y, button));
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
     public boolean isPauseScreen() {
         return false;
     }
 
     @Override
     public void closeScreen() {
-        direction = false;
         onClosePlayerPos = mc.gameRenderer.getActiveRenderInfo().getPos();
         Vector3d lookVector = new Vector3d(mc.gameRenderer.getActiveRenderInfo().getViewVector());
         double offsetDistance = 7.5f * mc.getMainWindow().getFramebufferHeight() / 1080.0f;
         onClosePlayerPos = onClosePlayerPos.add(lookVector.scale(offsetDistance));
         rotation = new Vector2f(mc.gameRenderer.getActiveRenderInfo().getYaw(), mc.gameRenderer.getActiveRenderInfo().getPitch());
-//        components.clear();
         final float x = UI_WIDTH / -2;
         final float y = UI_HEIGHT / -2;
-        final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
-        final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
-        final float oldX = width / 2 - UI_WIDTH / 2;
-        final float oldY = height / 2 - UI_HEIGHT / 2;
-        components.forEach(component -> component.setX(component.getX() - oldX + x));
-        components.forEach(component -> component.setY(component.getY() - oldY + y));
-//        register(new MainComponent(x, y, UI_WIDTH, UI_HEIGHT, this));
-//        register(new LeftAreaComponent(x, y, 64, UI_HEIGHT, this));
-//        register(new HeaderComponent(x + 64 + 1, y, UI_WIDTH - (64 + 1), 59, this));
-//        register(new ModulesComponent(x + 64 + 1, y + 59 + 1, UI_WIDTH - (64 + 1), UI_HEIGHT - (59 + 1), this));
+//        final float width = mc.getMainWindow().getScaledWidthWithoutAutisticMojangIssue(1);
+//        final float height = mc.getMainWindow().getScaledHeightWithoutAutisticMojangIssue(1);
+/*        final float oldX = width / 2 - UI_WIDTH / 2;
+        final float oldY = height / 2 - UI_HEIGHT / 2;*/
+        components.forEach(component -> component.setX(component.getX() - lastX + x));
+        components.forEach(component -> component.setY(component.getY() - lastY + y));
+        lastX = x;
+        lastY = y;
         EventManager.register(this);
         super.closeScreen();
     }
@@ -187,7 +195,7 @@ public class UIMain extends Screen implements IInstanceAccess, IManager<Componen
     }
 
     @EventTarget
-    public void onTick(TickEvent ignoredEvent) {
+    public void onTick(UpdateEvent ignoredEvent) {
         if (components.stream().filter(Component::isSomeElementHovered).toList().isEmpty()) ScreenService.setArrowCursor();
         animation.update(false);
         components.forEach(Component::tick);

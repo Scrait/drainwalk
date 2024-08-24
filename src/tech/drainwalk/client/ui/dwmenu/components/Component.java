@@ -31,6 +31,7 @@ public abstract class Component implements IInstanceAccess, ITheme, IFonts {
     public abstract void tick();
     public abstract void charTyped(char codePoint, int modifiers);
     public abstract void mouseClicked(double mouseX, double mouseY, int button);
+    public abstract void mouseReleased(double mouseX, double mouseY, int button);
     public abstract void mouseScrolled(double mouseX, double mouseY, double delta);
 
     public void renderWithCursorLogic(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

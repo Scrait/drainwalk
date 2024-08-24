@@ -76,6 +76,7 @@ public abstract class Player<P> {
 	public ModelDefinition getModelDefinition() {
 		ModelDefinition def = getModelDefinition0();
 		if(def != null) {
+			System.out.println("def != null!!!!!!!!!!");
 			if(def.getResolveState() == ModelLoadingState.NEW)def.startResolve();
 			else if(def.getResolveState() == ModelLoadingState.LOADED) {
 				if(def.doRender()) {

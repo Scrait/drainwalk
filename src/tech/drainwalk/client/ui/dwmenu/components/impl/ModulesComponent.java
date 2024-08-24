@@ -9,10 +9,12 @@ import org.lwjgl.glfw.GLFW;
 import tech.drainwalk.api.impl.models.module.Module;
 import tech.drainwalk.client.option.Option;
 import tech.drainwalk.client.option.options.BooleanOption;
+import tech.drainwalk.client.option.options.FloatOption;
 import tech.drainwalk.client.ui.dwmenu.UIMain;
 import tech.drainwalk.client.ui.dwmenu.components.Component;
 import tech.drainwalk.client.ui.dwmenu.elements.Element;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.CheckboxElement;
+import tech.drainwalk.client.ui.dwmenu.elements.impl.SliderElement;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.TogglerElement;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
@@ -39,6 +41,8 @@ public class ModulesComponent extends Component {
             module.getSettingList().forEach(option -> {
                 if (option instanceof BooleanOption booleanOption) {
                     optionElements.put(module, new CheckboxElement(booleanOption));
+                } else if (option instanceof FloatOption floatOption) {
+                    optionElements.put(module, new SliderElement(floatOption));
                 } // else if...
             });
             moduleToggleElement.put(module, new TogglerElement(new BooleanOption(module.getName(), module.isEnabled())));
@@ -104,7 +108,7 @@ public class ModulesComponent extends Component {
             RenderService.drawRect(matrixStack, elementX + 1, elementY + MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14), elementWidth - 2, 1, borderColor);
 
             float bindPosXOffset = 25;
-            if (!module.getSettingList().isEmpty()) {
+            if (!optionElements.get(module).isEmpty()) {
                 ICONS.drawText(matrixStack, Icon.OPTIONS.getSymbolString(),
                         elementX + MODULE_PADDING,
                         elementY + MODULE_PADDING * 4 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14) + 1,
@@ -209,6 +213,7 @@ public class ModulesComponent extends Component {
             module.getAnimation().update(module.isEnabled());
             optionElements.get(module).forEach(element -> element.getOpenAnimation().update(module.isOptionsOpened()));
             optionElements.get(module).forEach(Element::tick);
+            moduleToggleElement.get(module).getOption().setValue(module.isEnabled());
             moduleToggleElement.get(module).tick();
             for (Element<? extends Option<?>> element : optionElements.get(module)) {
                 element.getWithModuleEnabledAnimation().update(module.isEnabled());
@@ -242,8 +247,12 @@ public class ModulesComponent extends Component {
             }
 
             if (ScreenService.isHovered((int) mouseX, (int) mouseY, elementX, elementY, elementWidth, MODULE_PADDING * 3 + SFPD_REGULAR.getHeight(16) + SFPD_REGULAR.getHeight(14))) {
-                module.toggle();
-                moduleToggleElement.get(module).getOption().setValue(module.isEnabled());
+                if (button == 1) {
+                    module.setOptionsOpened(!module.isOptionsOpened());
+                } else {
+                    module.toggle();
+                    togglerElement.getOption().setValue(module.isEnabled());
+                }
             }
 
             if (ScreenService.isHovered((int) mouseX, (int) mouseY, elementX + MODULE_PADDING,
@@ -252,6 +261,11 @@ public class ModulesComponent extends Component {
 
             columnHeights[column] += elementHeight + PADDING;
         }
+    }
+
+    @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+        optionElements.forEach((module, element) -> element.mouseReleased(mouseX, mouseY, button));
     }
 
     @Override

@@ -88,6 +88,7 @@ public class ModelDefinitionLoader<GP> {
 			} else {
 				Log.debug("Loading skin model for " + key.profile);
 				player.setModelDefinition(texLoad.thenCompose(v -> player.getTextures().getTexture(TextureType.SKIN)).thenApplyAsync(skin -> {
+					System.out.println("HUY");
 					if(skin != null && player.getModelDefinition() == null) {
 						System.out.println("loadModel");
 						return loadModel(skin, player);
@@ -157,6 +158,7 @@ public class ModelDefinitionLoader<GP> {
 	}
 
 	public ModelDefinition loadModel(Image skin, Player<?> player) {
+		System.out.println("loadModel CHLEN");
 		try(SkinDataInputStream in = new SkinDataInputStream(skin, template, player.getSkinType().getChannel())) {
 			return loadModel(in, player);
 		} catch (Exception e) {

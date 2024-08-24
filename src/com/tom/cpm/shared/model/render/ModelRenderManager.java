@@ -132,7 +132,6 @@ public abstract class ModelRenderManager<D, S, P, MB> implements IPlayerRenderMa
 	public <R> R getHolderSafe(MB model, String arg, Function<RedirectHolder<MB, D, S, P>, R> func, R def, boolean make) {
 		RedirectHolder<MB, D, S, P> h = holders.get(model);
 		if(h == null && make) {
-			System.out.println("MAMON");
 			h = (RedirectHolder<MB, D, S, P>) factory.create(model, arg);
 			if(h != null)holders.put(model, h);
 		}
@@ -143,7 +142,6 @@ public abstract class ModelRenderManager<D, S, P, MB> implements IPlayerRenderMa
 	public void getHolderSafe(MB model, String arg, Consumer<RedirectHolder<MB, D, S, P>> func, boolean make) {
 		RedirectHolder<MB, D, S, P> h = holders.get(model);
 		if(h == null && make) {
-			System.out.println("MAMON");
 			h = (RedirectHolder<MB, D, S, P>) factory.create(model, arg);
 			if(h != null)holders.put(model, h);
 		}

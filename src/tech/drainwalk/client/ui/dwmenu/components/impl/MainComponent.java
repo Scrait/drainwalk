@@ -36,6 +36,11 @@ public class MainComponent extends Component {
     public void mouseClicked(double mouseX, double mouseY, int button) {}
 
     @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+
+    }
+
+    @Override
     public void mouseScrolled(double mouseX, double mouseY, double delta) {}
 
 }

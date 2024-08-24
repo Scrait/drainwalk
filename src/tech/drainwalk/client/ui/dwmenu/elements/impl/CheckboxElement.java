@@ -54,4 +54,9 @@ public class CheckboxElement extends Element<BooleanOption> {
 
     }
 
+    @Override
+    public void mouseReleased(double mouseX, double mouseY, int button) {
+
+    }
+
 }

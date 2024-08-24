@@ -80,7 +80,7 @@ public class GuiBase extends Screen implements IGui {
 		this.colors = new UIColors();
 		this.parent = parent;
 		try {
-			this.gui = new EditorGui(this);
+			this.gui = creator.apply(this);
 		} catch (Throwable e) {
 			onGuiException("Error creating gui", e, true);
 		}
@@ -124,12 +124,12 @@ public class GuiBase extends Screen implements IGui {
 
 	@Override
 	public void onClose() {
-		this.minecraft.keyboardListener.enableRepeatEvents(false);
-		if(vanillaScale >= 0 && vanillaScale != minecraft.gameSettings.guiScale) {
-			minecraft.gameSettings.guiScale = vanillaScale;
-			vanillaScale = -999;
-			minecraft.updateWindowSize();
-		}
+//		this.minecraft.keyboardListener.enableRepeatEvents(false);
+//		if(vanillaScale >= 0 && vanillaScale != minecraft.gameSettings.guiScale) {
+//			minecraft.gameSettings.guiScale = vanillaScale;
+//			vanillaScale = -999;
+//			minecraft.updateWindowSize();
+//		}
 	}
 
 	@Override
@@ -351,9 +351,9 @@ public class GuiBase extends Screen implements IGui {
 	@Override
 	public void closeGui() {
 		if(closeListener != null) {
-			closeListener.accept(this::onClose);
+			closeListener.accept(this::closeScreen);
 		} else
-			onClose();
+			closeScreen();
 	}
 
 	@SuppressWarnings("deprecation")

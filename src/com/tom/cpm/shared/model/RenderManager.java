@@ -33,10 +33,12 @@ public class RenderManager<G, P, M, D> {
 		Player<P> profile = (Player<P>) loader.loadPlayer(gprofile, unique);
 		if(profile == null) {
 			renderManager.unbindModel(toBind);
+			System.out.println("profile == null");
 			return false;
 		}
 		ModelDefinition def = profile.getModelDefinition();
 		if(def != null) {
+			System.out.println("(def != null");
 			this.profile = profile;
 			profile.animState.animationMode = mode;
 			if(player != null)

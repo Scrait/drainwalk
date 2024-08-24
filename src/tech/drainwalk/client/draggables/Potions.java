@@ -99,6 +99,7 @@ public class Potions extends DraggableComponent {
             RenderService.drawRoundedDiagonalGradientRect(matrixStack, x, y, widthAnim, getDraggableOption().getHeight(), round, backgroundColors[0], backgroundColors[1]);
             // title
             {
+                final int borderColor = ColorService.getColorWithAlpha(additionalSecondColor, 0.2f);
                 // left
                 RenderService.drawRoundedOutlineRect(matrixStack, x + padding.getValue(), y + padding.getValue(), 16, 16, 3,1, borderColor);
                 ICONS.drawText(matrixStack, String.valueOf(Icon.POTION.getSymbol()), x + padding.getValue() + 3.75f, y + padding.getValue() + 3f, textSecondColor, 12);
