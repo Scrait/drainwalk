@@ -6,12 +6,10 @@ import tech.drainwalk.client.option.Option;
 
 import java.util.function.BooleanSupplier;
 
+@Getter
 public class FloatOption extends Option<Float> {
-    @Getter
     private final float min;
-    @Getter
     private final float max;
-    @Getter
     private float inc = 1;
 
     public FloatOption(String settingName, float value, float min, float max) {

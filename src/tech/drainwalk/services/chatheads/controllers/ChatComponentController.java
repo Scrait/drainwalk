@@ -31,6 +31,8 @@ public class ChatComponentController implements IInstanceAccess {
     public void render(MatrixStack matrixStack) {
         NetworkPlayerInfo owner = ((GuiMessageOwnerAccessor)ChatHeadsFields.lastGuiMessage).chatheads$getOwner();
         if (owner == null) return;
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         RenderSystem.color4f(1, 1, 1, ChatHeadsFields.lastOpacity);
         mc.getTextureManager().bindTexture(owner.getLocationSkin());
         // draw base layer
@@ -38,6 +40,7 @@ public class ChatComponentController implements IInstanceAccess {
         // draw hat
         AbstractGui.blit(matrixStack, 0, ChatHeadsFields.lastY, 8, 8, 40.0F, 8, 8, 8, 64, 64);
         RenderSystem.color4f(1, 1, 1, 1);
+        RenderSystem.disableBlend();
     }
 
     public int correctClickPosition(int x) {

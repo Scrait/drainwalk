@@ -2,7 +2,6 @@ package tech.drainwalk.client.ui.dwmenu.elements;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import tech.drainwalk.api.impl.interfaces.IFonts;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
@@ -10,16 +9,22 @@ import tech.drainwalk.api.impl.interfaces.ITheme;
 import tech.drainwalk.services.animation.Animation;
 
 @Getter
-@RequiredArgsConstructor
 public abstract class Element<T> implements IInstanceAccess, ITheme, IFonts {
 
     @Setter
     protected float x, y;
-    protected final float width, height;
+    @Setter
+    protected float width, height;
     protected final T option;
     protected final Animation withModuleEnabledAnimation = new Animation();
     protected final Animation openAnimation = new Animation();
     protected final Animation activeAnimation = new Animation();
+
+    public Element(float width, float height, T option) {
+        this.width = width;
+        this.height = height;
+        this.option = option;
+    }
 
     public abstract void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
     public abstract void tick();

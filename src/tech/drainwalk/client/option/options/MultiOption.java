@@ -5,8 +5,8 @@ import tech.drainwalk.client.option.Option;
 
 import java.util.function.BooleanSupplier;
 
+@Getter
 public class MultiOption extends Option<MultiOptionValue> {
-    @Getter
     private final MultiOptionValue[] values;
 
     public MultiOption(final String settingName,

@@ -6,12 +6,11 @@ import tech.drainwalk.client.option.Option;
 
 import java.util.function.BooleanSupplier;
 
+@Getter
 public class BooleanOption extends Option<Boolean> {
     @Setter
-    @Getter
     private boolean keyBindVisible;
     @Setter
-    @Getter
     private boolean key;
     public BooleanOption(String settingName, Boolean value) {
         super(settingName, value);

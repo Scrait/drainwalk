@@ -3,13 +3,11 @@ package tech.drainwalk.client.option.options;
 import lombok.Getter;
 import tech.drainwalk.services.animation.Animation;
 
+@Getter
 public class SelectOptionValue  {
-    @Getter
     private final Animation animation = new Animation();
-    @Getter
-    private final Animation hoveredAnimation = new Animation();
+    private final Animation openAnimation = new Animation();
 
-    @Getter
     private final String name;
 
     public SelectOptionValue(final String name) {

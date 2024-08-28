@@ -6,23 +6,27 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
+import tech.drainwalk.api.impl.models.DrainwalkResource;
 import tech.drainwalk.api.impl.models.module.Module;
+import tech.drainwalk.api.impl.models.module.category.Category;
 import tech.drainwalk.client.option.Option;
 import tech.drainwalk.client.option.options.BooleanOption;
 import tech.drainwalk.client.option.options.FloatOption;
+import tech.drainwalk.client.option.options.SelectOption;
 import tech.drainwalk.client.ui.dwmenu.UIMain;
 import tech.drainwalk.client.ui.dwmenu.components.Component;
 import tech.drainwalk.client.ui.dwmenu.elements.Element;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.CheckboxElement;
+import tech.drainwalk.client.ui.dwmenu.elements.impl.DropdownElement;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.SliderElement;
 import tech.drainwalk.client.ui.dwmenu.elements.impl.TogglerElement;
+import tech.drainwalk.services.animation.AnimationService;
 import tech.drainwalk.services.animation.EasingList;
 import tech.drainwalk.services.font.Icon;
 import tech.drainwalk.services.render.*;
+import tech.drainwalk.utils.time.Timer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ModulesComponent extends Component {
 
@@ -43,6 +47,8 @@ public class ModulesComponent extends Component {
                     optionElements.put(module, new CheckboxElement(booleanOption));
                 } else if (option instanceof FloatOption floatOption) {
                     optionElements.put(module, new SliderElement(floatOption));
+                } else if (option instanceof SelectOption selectOption) {
+                    optionElements.put(module, new DropdownElement(selectOption));
                 } // else if...
             });
             moduleToggleElement.put(module, new TogglerElement(new BooleanOption(module.getName(), module.isEnabled())));
@@ -57,7 +63,7 @@ public class ModulesComponent extends Component {
 
         float elementWidth = (width - (COLUMNS + 1) * PADDING) / COLUMNS;
 
-        scrollOffset += (targetScrollOffset - scrollOffset) * 0.2f;
+        scrollOffset = AnimationService.animation(scrollOffset, targetScrollOffset, (float) (Timer.deltaTime()));
 
         float[] columnHeights = new float[COLUMNS];
         for (Module module : modules) {
@@ -143,6 +149,12 @@ public class ModulesComponent extends Component {
             StencilService.initStencilToWrite();
             RenderService.drawRect(matrixStack, elementX, elementY, elementWidth, elementHeight, -1);
             StencilService.readStencilBuffer(3);
+            // poloska
+            final Collection<Element<? extends Option<?>>> elements = optionElements.get(module);
+            final Element<? extends Option<?>> firstElement = elements.isEmpty() ? null : new ArrayList<>(elements).getFirst();
+            final float poloskaAnim = (firstElement == null ? 0 : firstElement.getOpenAnimation().getAnimationValue());
+            final float poloskaWidth = (elementWidth - 2);
+            RenderService.drawRect(matrixStack, (elementX + 1) + poloskaWidth / 2 - (poloskaWidth / 2) * poloskaAnim, optionY - PADDING / 2 - 4, (poloskaWidth) * poloskaAnim, 1, borderColor);
             for (Element<? extends Option<?>> element : optionElements.get(module)) {
                 matrixStack.push();
                 element.getWithModuleEnabledAnimation().animate(0, 1, 0.2f, EasingList.NONE, mc.getTimer().renderPartialTicks);
@@ -162,11 +174,18 @@ public class ModulesComponent extends Component {
 
             StencilService.uninitStencilBuffer();
         }
+
+
+        if (parent.getSelectedCategory() == Category.SCRIPTS ||
+                parent.getSelectedCategory() == Category.CONFIGS ||
+                parent.getSelectedCategory() == Category.THEMES) {
+            RenderService.drawRoundedTexture(matrixStack, new DrainwalkResource("textures/gui/cat.png"), x, y, width, height, 8, 0.1f);
+        }
     }
 
     @Override
     public void mouseScrolled(double mouseX, double mouseY, double delta) {
-        final float SCROLL_SPEED = 30f;
+        final float SCROLL_SPEED = 50f;
         targetScrollOffset -= (float) (delta * SCROLL_SPEED);
 
         List<Module> modules = dw.getApiMain().getModuleManager().stream()
@@ -182,13 +201,10 @@ public class ModulesComponent extends Component {
             float elementHeight = getModuleHeight(module);
             columnHeights[column] += elementHeight + PADDING;
 
-            if (column == COLUMNS - 1 || i == modules.size() - 1) {
-                totalHeight = Math.max(totalHeight, columnHeights[column]);
-            }
+//            if (column == COLUMNS - 1 || i == modules.size() - 1) {
+            totalHeight = Math.max(totalHeight, columnHeights[column]);
+//            }
         }
-
-        float maxScroll = Math.max(0, totalHeight - height + PADDING);
-        targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScroll));
     }
 
     private float getModuleHeight(Module module) {
@@ -209,7 +225,14 @@ public class ModulesComponent extends Component {
         List<Module> modules = dw.getApiMain().getModuleManager().stream()
                 .filter(module -> module.getCategory() == parent.getSelectedCategory())
                 .toList();
+        float totalHeight = 0;
+        float[] columnHeights = new float[COLUMNS];
         for (Module module : modules) {
+            int i = modules.indexOf(module);
+            int column = i % COLUMNS;
+            float elementHeight = getModuleHeight(module);
+            columnHeights[column] += elementHeight + PADDING;
+            totalHeight = Math.max(totalHeight, columnHeights[column]);
             module.getAnimation().update(module.isEnabled());
             optionElements.get(module).forEach(element -> element.getOpenAnimation().update(module.isOptionsOpened()));
             optionElements.get(module).forEach(Element::tick);
@@ -219,6 +242,9 @@ public class ModulesComponent extends Component {
                 element.getWithModuleEnabledAnimation().update(module.isEnabled());
             }
         }
+
+        float maxScroll = Math.max(0, totalHeight - height + PADDING);
+        targetScrollOffset = Math.max(0, Math.min(targetScrollOffset, maxScroll));
     }
 
     @Override

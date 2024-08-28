@@ -105,9 +105,9 @@ public class Potions extends DraggableComponent {
                 ICONS.drawText(matrixStack, String.valueOf(Icon.POTION.getSymbol()), x + padding.getValue() + 3.75f, y + padding.getValue() + 3f, textSecondColor, 12);
 
                 RenderService.drawRoundedOutlineRect(matrixStack, x + padding.getValue() + 20, y + padding.getValue(), 16, 16, 3,1, borderColor);
-                SFPD_REGULAR.drawText(matrixStack,
+                SFPD_REGULAR.drawCenteredText(matrixStack,
                         String.valueOf(mc.player.getActivePotionEffects().size()),
-                        x + padding.getValue() + 24.5f, y + padding.getValue() + 1f, textSecondColor, FONT_SIZE);
+                        x + padding.getValue() + 20 + 7.7f, y + padding.getValue() + 1f, textSecondColor, FONT_SIZE);
 
 
                 //right

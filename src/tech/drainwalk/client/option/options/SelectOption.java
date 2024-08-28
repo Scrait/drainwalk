@@ -6,11 +6,10 @@ import tech.drainwalk.utils.math.MathematicUtils;
 
 import java.util.function.BooleanSupplier;
 
+@Getter
 public class SelectOption extends Option<SelectOptionValue> {
-    @Getter
     private final SelectOptionValue[] values;
 
-    @Getter
     private int currentSelected;
 
     public SelectOption(String settingName, int selected, SelectOptionValue... values) {

@@ -183,7 +183,6 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
 
         final float[] c = ColorService.getRGBAf(color);
         RenderSystem.color4f(c[0], c[1], c[2], c[3]);
@@ -191,7 +190,6 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         allocateTextureRect(matrixStack, x, y, width, height);
 
         RenderSystem.disableBlend();
-        RenderSystem.disableDepthTest();
     }
 
     public void drawImage(MatrixStack matrixStack, ResourceLocation resourceLocation, float x, float y, float width, float height,
