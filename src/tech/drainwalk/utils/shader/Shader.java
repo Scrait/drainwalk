@@ -74,6 +74,7 @@ public class Shader {
         }
         glAttachShader(shaderProgram, fragmentShader);
         glCompileShader(fragmentShader);
+        checkCompileErrors(fragmentShader, "FRAGMENT");
 
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
         try {
@@ -82,6 +83,7 @@ public class Shader {
             throw new RuntimeException(e);
         }
         glCompileShader(vertexShader);
+        checkCompileErrors(vertexShader, "VERTEX");
         glAttachShader(shaderProgram, vertexShader);
         glDeleteShader(fragmentShader);
         glDeleteShader(vertexShader);

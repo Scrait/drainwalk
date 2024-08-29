@@ -13,6 +13,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import tech.drainwalk.api.impl.interfaces.IInstanceAccess;
 import tech.drainwalk.api.impl.interfaces.IShaders;
+import tech.drainwalk.utils.shader.Shader;
 
 @UtilityClass
 public class RenderService extends AbstractGui implements IInstanceAccess, IShaders {
@@ -239,6 +240,42 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
 //        allocateTextureRect(matrixStack, x, y, width, height);
         PROGRESS_BAR.unloadProgram();
         RenderSystem.disableBlend();
+    }
+
+    public void drawMainMenuShader(float width, float height, int mouseX, int mouseY) {
+        MAIN_MENU.useProgram();
+        MAIN_MENU.setupUniform2f("u_resolution", width, height); // Set screen resolution
+        MAIN_MENU.setupUniform2f("u_mouse", mouseX, mouseY); // Set mouse position
+        MAIN_MENU.setupUniform1f("u_time", (float) (System.currentTimeMillis() % 100000) / 1000f); // Set time
+
+        // Set color uniforms
+        // Значения для u_colors[0]
+        float[] color1 = {
+                0.4980392156862745f,
+                0.47843137254901963f,
+                0.611764705882353f,
+                1
+        };
+
+        // Значения для u_colors[1]
+        float[] color2 = {
+                0.36470588235294116f,
+                0.3254901960784314f,
+                0.611764705882353f,
+                1
+        };
+
+        // Установка униформы u_colors[0]
+        MAIN_MENU.setupUniform4f("u_colors[0]", color1[0], color1[1], color1[2], color1[3]);
+
+        // Установка униформы u_colors[1]
+        MAIN_MENU.setupUniform4f("u_colors[1]", color2[0], color2[1], color2[2], color2[3]);
+
+        MAIN_MENU.setupUniform1f("u_intensity", 0.6f);
+        MAIN_MENU.setupUniform1f("u_rays", 0.078f);
+        MAIN_MENU.setupUniform1f("u_reach", 0.061f);
+        Shader.drawQuads();
+        MAIN_MENU.unloadProgram();
     }
 
 

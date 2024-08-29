@@ -10,5 +10,6 @@ public interface IShaders {
     Shader SHADOW = new Shader("shaders/shadow.fsh", true);
     Shader ROUNDED_OUTLINE = new Shader("shaders/rounded_outline.fsh", true);
     Shader PROGRESS_BAR = new Shader("shaders/progress_bar.fsh", true);
+    Shader MAIN_MENU = new Shader("shaders/mainmenu/shader.fsh", true);
 
 }
