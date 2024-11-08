@@ -271,9 +271,9 @@ public class RenderService extends AbstractGui implements IInstanceAccess, IShad
         // Установка униформы u_colors[1]
         MAIN_MENU.setupUniform4f("u_colors[1]", color2[0], color2[1], color2[2], color2[3]);
 
-        MAIN_MENU.setupUniform1f("u_intensity", 0.6f);
+        MAIN_MENU.setupUniform1f("u_intensity", 0.2f);
         MAIN_MENU.setupUniform1f("u_rays", 0.078f);
-        MAIN_MENU.setupUniform1f("u_reach", 0.061f);
+        MAIN_MENU.setupUniform1f("u_reach", 0.261f);
         Shader.drawQuads();
         MAIN_MENU.unloadProgram();
     }

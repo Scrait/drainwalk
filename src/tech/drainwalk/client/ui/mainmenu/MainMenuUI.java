@@ -39,19 +39,19 @@ public class MainMenuUI extends Screen implements IInstanceAccess {
         final float buttonsGap = 8 / factor;
 
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2), (int) (height / 2f - buttonHeight / 2 - ((buttonsGap + buttonHeight))), (int) buttonWidth, (int) buttonHeight,
-                new TranslationTextComponent("menu.singleplayer"),
+                new StringTextComponent("Singleplayer"),
                 (button) -> this.minecraft.displayGuiScreen(new WorldSelectionScreen(this)), false));
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2), (int) (height / 2f - buttonHeight / 2), (int) buttonWidth, (int) buttonHeight,
-                new TranslationTextComponent("menu.multiplayer"),
+                new StringTextComponent("Multiplayer"),
                 (button) -> this.minecraft.displayGuiScreen(new MultiplayerScreen(this)), false));
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2), (int) (height / 2f - buttonHeight / 2 + ((buttonsGap + buttonHeight))), (int) buttonWidth, (int) buttonHeight,
-                new StringTextComponent("Alt Manager"),
+                new StringTextComponent("Account Manager"),
                 (button) -> this.minecraft.displayGuiScreen(new AltGui()), false));
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2), (int) (height / 2f - buttonHeight / 2 + ((buttonsGap + buttonHeight) * 2)), (int) buttonWidth, (int) buttonHeight,
-                new TranslationTextComponent("menu.options"),
+                new StringTextComponent("Options"),
                 (button) -> this.minecraft.displayGuiScreen(new OptionsScreen(this, mc.gameSettings)), false));
         this.addButton(new CustomButton((int) (width / 2f - buttonWidth / 2 / 2), (int) (height / 2f - buttonHeight / 2 + ((buttonsGap + buttonHeight) * 3 + buttonsGap * 2)), (int) buttonWidth / 2, (int) buttonHeight,
-                new TranslationTextComponent("menu.quit"),
+                new StringTextComponent("Quit"),
                 (button) ->  mc.displayGuiScreen(new GuiImpl(EditorGui::new, mc.currentScreen)), true));
     }
 

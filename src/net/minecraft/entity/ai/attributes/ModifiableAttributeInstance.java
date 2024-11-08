@@ -5,11 +5,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import net.minecraft.nbt.CompoundNBT;
@@ -216,7 +213,12 @@ public class ModifiableAttributeInstance
     public CompoundNBT writeInstances()
     {
         CompoundNBT compoundnbt = new CompoundNBT();
-        compoundnbt.putString("Name", Registry.ATTRIBUTE.getKey(this.genericAttribute).toString());
+        // TODO: краш какой-то хуй его знает (зафиксил сука всеми способами)
+        try {
+            compoundnbt.putString("Name", Objects.requireNonNull(Registry.ATTRIBUTE.getKey(this.genericAttribute) == null ? "PIDOR" : Registry.ATTRIBUTE.getKey(this.genericAttribute)).toString());
+        } catch (NullPointerException e) {
+            e.fillInStackTrace();
+        }
         compoundnbt.putDouble("Base", this.base);
 
         if (!this.mapByUUID.isEmpty())

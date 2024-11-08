@@ -17,7 +17,7 @@ import tech.drainwalk.services.render.ScissorService;
 
 import javax.annotation.Nonnull;
 
-public class CustomButton extends Button implements IFonts, IInstanceAccess, ITheme {
+public class CustomButton extends Button implements IFonts, IInstanceAccess {
 
     private final Animation hoverAnimation = new Animation();
     private final boolean isAlternativeButton;
@@ -48,15 +48,16 @@ public class CustomButton extends Button implements IFonts, IInstanceAccess, ITh
         hoverAnimation.animate(0, 1, 0.1f, EasingList.NONE, partialTicks);
 
         // colors
+        final int buttonColor = isAlternativeButton ? ColorService.hexToRgb("#FF6969") : ColorService.hexToRgb("#A39BD6");
         final int bgColor = ColorService.interpolateColor(ColorService.getColorWithAlpha(-1, 0.03f),
-                ColorService.getColorWithAlpha(additionalSecondColor, 0.05f), hoverAnimation.getAnimationValue());
+                ColorService.getColorWithAlpha(buttonColor, 0.05f), hoverAnimation.getAnimationValue());
         final int bgOutlineColor = ColorService.interpolateColor(ColorService.getColorWithAlpha(-1, 0.05f),
-                ColorService.getColorWithAlpha(additionalSecondColor, 0.2f), hoverAnimation.getAnimationValue());
-        final int additionalSecondColorWithAlpha = ColorService.getColorWithAlpha(additionalSecondColor, 0);
+                ColorService.getColorWithAlpha(buttonColor, 0.2f), hoverAnimation.getAnimationValue());
+        final int additionalSecondColorWithAlpha = ColorService.getColorWithAlpha(buttonColor, 0);
         final int bgGradientColor = ColorService.interpolateColor(additionalSecondColorWithAlpha,
-                ColorService.getColorWithAlpha(additionalSecondColor, 0.2f), hoverAnimation.getAnimationValue());
+                ColorService.getColorWithAlpha(buttonColor, 0.2f), hoverAnimation.getAnimationValue());
         final int bgOutlineGradientColor = ColorService.interpolateColor(additionalSecondColorWithAlpha,
-                additionalSecondColor, hoverAnimation.getAnimationValue());
+                buttonColor, hoverAnimation.getAnimationValue());
 
         // bg
         RenderService.drawRoundedRect(matrixStack, x, y, width, height, 6, bgColor);
